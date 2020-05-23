@@ -12,7 +12,7 @@ class EmpresaController extends Controller
         'descrip_comida', 'rutalogo', 'rutafoto', 'coordenadax', 
         'coordenaday', 'valor_contrato', 'sitioweb', 
         'instagram', 'facebook', 'fechaini_actividad', 'prioridad', 
-        'observacion', 'etiquetas', 'estado'];
+        'observacion', 'etiquetas', 'estado', 'ciudad_id'];
 
     protected $rules = [
         'codemp' => 'required|unique:empresa', 'nombre' => 'required|unique:empresa', 'descripcion' => 'required', 
@@ -21,7 +21,7 @@ class EmpresaController extends Controller
         'rutalogo' => '', 'rutafoto' => '', 'coordenadax' => '', 'coordenaday' => '', 
         'valor_contrato' => '', 'sitioweb' => '', 
         'instagram' => '', 'facebook' => '', 'fechaini_actividad' => '', 'prioridad' => '', 
-        'observacion' => '', 'etiquetas' => '', 'estado' => ''
+        'observacion' => '', 'etiquetas' => '', 'estado' => '' ,'ciudad_id' => 'required'
     ];
     
     public function all(){
@@ -34,11 +34,11 @@ class EmpresaController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = Empresa::where($params)->get();
+            $res = Empresa::where($params)->with('ciudad')->get();
         }
         else{
             $whereRaw = str_replace('s3lect', 'select', $whereRaw);
-            $res = Empresa::whereRaw($whereRaw)->get();
+            $res = Empresa::whereRaw($whereRaw)->with('ciudad')->get();
         }
         return response()->json(['data' => $res]);
     }
