@@ -24,10 +24,10 @@ class ClaseController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = Clase::where($params)->get();
+            $res = Clase::where($params)->with('grupos')->get();
         }
         else{
-            $res = Clase::whereRaw($whereRaw)->get();
+            $res = Clase::whereRaw($whereRaw)->with('grupos')->get();
         }
         return response()->json(['data' => $res]);
     }

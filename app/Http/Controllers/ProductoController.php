@@ -141,4 +141,59 @@ class ProductoController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
+    
+    public function tree(){
+        $sql = Producto::select(
+                'clase.descripcion as clase', 'clase.id as clase_id', 'grupo.descripcion as grupo', 
+                'grupo.id as grupo_id', 'empresa.nombre as empresa', 'empresa.id as empresa_id')
+            ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+            ->groupBy('clase', 'grupo', 'empresa')
+            ->get();
+
+        $tree = array();
+        $clases = [];
+        foreach($sql as $row){
+
+            $clase = $row['clase'];
+            $clase_id = $row['clase_id'];
+            $grupo = $row['grupo'];
+            $grupo_id = $row['grupo_id'];
+            $empresa = $row['empresa'];
+            $empresa_id = $row['empresa_id'];
+
+            if(in_array($clase, $clases)){
+                for ($i=0; $i < count($tree) ; $i++) { 
+                    if($tree[$i]['nombre'] == $clase){
+                        $added = false;
+                        for($j=0;$j<count($tree[$i]['grupos']);$j++) {
+                            if($tree[$i]['grupos'][$j]['nombre']==$grupo){
+                                $tree[$i]['grupos'][$j]['empresas'][] = ['nombre'=> $empresa, 'id'=>$empresa_id];
+                                $added = true;
+                            }
+                        }
+                        if(!$added){
+                            $grupos = array();
+                            $empresas = array();
+                            $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
+                            $grupos[] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
+                            $tree[$i]['grupos'] = $grupos;
+                        }
+                    }
+                }
+            }
+            else{
+                $grupos = array();
+                $empresas = array();
+                $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
+                $grupos[] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
+                $tree[] = ['nombre'=>$clase, 'id'=>$clase_id, 'grupos'=>$grupos];
+                $clases[] = $clase;
+            }
+        }
+
+        return response()->json(['data' => $tree]);
+    }
 }

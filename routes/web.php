@@ -25,6 +25,7 @@ $router->post('/login', 'LoginController@login');
 $router->group(['middleware' => 'auth'], function () use ($router) {
 
     $router->get('/logout', 'LoginController@logout');
+    $router->get('/product-tree', 'ProductoController@tree');
 
     // EMPRESA
     $router->get('/empresa', 'EmpresaController@get');
