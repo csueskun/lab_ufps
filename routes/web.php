@@ -25,7 +25,6 @@ $router->post('/login', 'LoginController@login');
 $router->group(['middleware' => 'auth'], function () use ($router) {
 
     $router->get('/logout', 'LoginController@logout');
-    $router->get('/product-tree', 'ProductoController@tree');
 
     // EMPRESA
     $router->get('/empresa', 'EmpresaController@get');
@@ -115,6 +114,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/producto/{id}', 'ProductoController@put');
     $router->patch('/producto/{id}', 'ProductoController@patch');
     $router->delete('/producto/{id}', 'ProductoController@delete');
+    $router->get('/product-tree', 'ProductoController@tree');
 	
 	// CIUDAD
     $router->get('/ciudad', 'CiudadController@get');
