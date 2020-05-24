@@ -16,7 +16,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 $router->get('/hola', function () use ($router) {
-    return 'hola tu';
+    return 'hola tu2';
 });
 $router->post('/login', 'LoginController@login');
 
@@ -109,6 +109,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 	// PRODUCTO
     $router->get('/producto', 'ProductoController@get');
     $router->get('/producto/{id}', 'ProductoController@find');
+    $router->get('/paginated/producto', 'ProductoController@paginate');
     $router->post('/producto', 'ProductoController@new');
     $router->put('/producto/{id}', 'ProductoController@put');
     $router->patch('/producto/{id}', 'ProductoController@patch');

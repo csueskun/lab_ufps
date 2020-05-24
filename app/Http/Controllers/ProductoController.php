@@ -41,6 +41,37 @@ class ProductoController extends Controller
         return response()->json(['data' => $res]);
     }
     
+    public function paginate(Request $request){
+        $per_page = 10;
+        $current_page = 1;
+        $params = $request->request->all();
+        if(array_key_exists('per_page', $params)){
+            $per_page = intval($params['per_page']);
+        }
+        if(array_key_exists('current_page', $params)){
+            $current_page = intval($params['current_page']);
+        }
+
+        $pagination = new \stdClass;
+        $pagination->pagination = new \stdClass;
+        $total = Producto::count();
+        $pagination->pagination->last_page =  ceil($total/$per_page);
+
+        if($current_page>$pagination->pagination->last_page){
+            $current_page = $pagination->pagination->last_page;
+        }
+        $skip = $per_page * ($current_page-1);
+
+        $data = Producto::skip($skip)->take($per_page)->get();
+        
+        $pagination->pagination->current_page =  $current_page;
+        $pagination->pagination->per_page =  $per_page;
+        $pagination->pagination->total =  $total;
+        $pagination->data =  $data;
+        
+        return response()->json(['data' => $pagination]);
+    }
+    
     public function find($id){
         $model = Producto::find($id);
         if($model){
