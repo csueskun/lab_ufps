@@ -67,7 +67,11 @@ class ProductoController extends Controller
         $pagination->pagination->current_page =  $current_page;
         $pagination->pagination->per_page =  $per_page;
         $pagination->pagination->total =  $total;
-        $pagination->pagination->showing =  ($current_page * $per_page) > $total ? ($current_page * $per_page - $total) : $per_page;
+        $from = $skip + 1;
+        $pagination->pagination->from =  $from;
+        $to = ($total < $from + $per_page) ? $total : $per_page * $current_page;
+        $pagination->pagination->to =  $to;
+        $pagination->pagination->showing =  $to - $from + 1;
         $pagination->data =  $data;
         
         return response()->json(['data' => $pagination]);
