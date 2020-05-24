@@ -62,7 +62,7 @@ class ProductoController extends Controller
         }
         $skip = $per_page * ($current_page-1);
 
-        $data = Producto::skip($skip)->take($per_page)->get();
+        $data = Producto::skip($skip)->take($per_page)->with('empresa')->get();
         
         $pagination->pagination->current_page =  $current_page;
         $pagination->pagination->per_page =  $per_page;
