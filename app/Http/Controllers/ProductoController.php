@@ -51,10 +51,27 @@ class ProductoController extends Controller
         if(array_key_exists('current_page', $params)){
             $current_page = intval($params['current_page']);
         }
+        $where = [];
+        if(array_key_exists('clase', $params)){
+            $where['clase.id'] = $params['clase']; 
+        }
+        if(array_key_exists('grupo', $params)){
+            $where['grupo.id'] = $params['grupo']; 
+        }
+        if(array_key_exists('empresa', $params)){
+            $where['empresa.id'] = $params['empresa']; 
+        }    
 
         $pagination = new \stdClass;
         $pagination->pagination = new \stdClass;
-        $total = Producto::count();
+        $total = Producto::select('clase.id')
+        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->where($where)
+        ->count();
+
         $pagination->pagination->last_page =  ceil($total/$per_page);
 
         if($current_page>$pagination->pagination->last_page){
@@ -62,7 +79,16 @@ class ProductoController extends Controller
         }
         $skip = $per_page * ($current_page-1);
 
-        $data = Producto::skip($skip)->take($per_page)->with('empresa')->get();
+        $data = Producto::select('producto.*')
+            ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+            ->where($where)
+            ->with('empresa')
+            ->skip($skip)
+            ->take($per_page)
+            ->get();
         
         $pagination->pagination->current_page =  $current_page;
         $pagination->pagination->per_page =  $per_page;
