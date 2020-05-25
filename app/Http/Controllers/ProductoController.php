@@ -205,11 +205,9 @@ class ProductoController extends Controller
                             }
                         }
                         if(!$added){
-                            $grupos = array();
                             $empresas = array();
                             $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
-                            $grupos[] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
-                            $tree[$i]['grupos'] = $grupos;
+                            $tree[$i]['grupos'][] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
                         }
                     }
                 }
