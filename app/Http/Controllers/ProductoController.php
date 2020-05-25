@@ -52,18 +52,22 @@ class ProductoController extends Controller
             $current_page = intval($params['current_page']);
         }
         $where = [];
+        $pagination = new \stdClass;
+        $pagination->pagination = new \stdClass;
+
         if(array_key_exists('clase', $params)){
             $where['clase.id'] = $params['clase']; 
+            $pagination->pagination->clase = intval($params['clase']);
         }
         if(array_key_exists('grupo', $params)){
             $where['grupo.id'] = $params['grupo']; 
+            $pagination->pagination->grupo = intval($params['grupo']);
         }
         if(array_key_exists('empresa', $params)){
             $where['empresa.id'] = $params['empresa']; 
+            $pagination->pagination->empresa = intval($params['empresa']);
         }    
 
-        $pagination = new \stdClass;
-        $pagination->pagination = new \stdClass;
         $total = Producto::select('clase.id')
         ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
