@@ -172,8 +172,8 @@ class ProductoController extends Controller
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->where('grupo.id', $producto->grupo)
-        ->where('producto.id', '!=', $producto->id)
-        ->take(8)
+        ->with('empresa')
+        ->take(9)
         ->get();
     
         return response()->json(['data' => $related]);
