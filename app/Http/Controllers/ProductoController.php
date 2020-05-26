@@ -157,6 +157,26 @@ class ProductoController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
+    
+    public function related($id){
+
+        $producto = Producto::select('grupo.id as grupo')
+        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->where('producto.id', $id)
+        ->first();
+
+        $related = Producto::select('producto.*')
+        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->where('grupo.id', $producto->grupo)
+        ->take(8)
+        ->get();
+    
+        return response()->json(['data' => $related]);
+    }
 
     public function save($request, $model, $rules, $fields){
         $this->validate($request, $rules);

@@ -115,6 +115,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->patch('/producto/{id}', 'ProductoController@patch');
     $router->delete('/producto/{id}', 'ProductoController@delete');
     $router->get('/product-tree', 'ProductoController@tree');
+    $router->get('/related-products/{id}', 'ProductoController@related');
 	
 	// CIUDAD
     $router->get('/ciudad', 'CiudadController@get');
