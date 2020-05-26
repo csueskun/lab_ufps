@@ -160,7 +160,7 @@ class ProductoController extends Controller
     
     public function related($id){
 
-        $producto = Producto::select('grupo.id as grupo')
+        $producto = Producto::select('producto.id', 'grupo.id as grupo')
         ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
@@ -172,6 +172,7 @@ class ProductoController extends Controller
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->where('grupo.id', $producto->grupo)
+        ->where('producto.id', '!=', $producto->id)
         ->take(8)
         ->get();
     
