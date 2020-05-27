@@ -41,6 +41,72 @@ class ProductoController extends Controller
         return response()->json(['data' => $res]);
     }
     
+    public function paginate(Request $request){
+        $per_page = 10;
+        $current_page = 1;
+        $params = $request->request->all();
+        if(array_key_exists('per_page', $params)){
+            $per_page = intval($params['per_page']);
+        }
+        if(array_key_exists('current_page', $params)){
+            $current_page = intval($params['current_page']);
+        }
+        $where = [];
+        $pagination = new \stdClass;
+        $pagination->pagination = new \stdClass;
+
+        if(array_key_exists('clase', $params)){
+            $where['clase.id'] = $params['clase']; 
+            $pagination->pagination->clase = intval($params['clase']);
+        }
+        if(array_key_exists('grupo', $params)){
+            $where['grupo.id'] = $params['grupo']; 
+            $pagination->pagination->grupo = intval($params['grupo']);
+        }
+        if(array_key_exists('empresa', $params)){
+            $where['empresa.id'] = $params['empresa']; 
+            $pagination->pagination->empresa = intval($params['empresa']);
+        }    
+
+        $total = Producto::select('clase.id')
+        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->where($where)
+        ->count();
+
+        $pagination->pagination->last_page =  ceil($total/$per_page);
+
+        if($current_page>$pagination->pagination->last_page){
+            $current_page = $pagination->pagination->last_page;
+        }
+        $skip = $per_page * ($current_page-1);
+
+        $data = Producto::select('producto.*')
+            ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+            ->where($where)
+            ->with('empresa')
+            ->skip($skip)
+            ->take($per_page)
+            ->get();
+        
+        $pagination->pagination->current_page =  $current_page;
+        $pagination->pagination->per_page =  $per_page;
+        $pagination->pagination->total =  $total;
+        $from = $skip + 1;
+        $pagination->pagination->from =  $from;
+        $to = ($total < $from + $per_page) ? $total : $per_page * $current_page;
+        $pagination->pagination->to =  $to;
+        $pagination->pagination->showing =  $to - $from + 1;
+        $pagination->data =  $data;
+        
+        return response()->json(['data' => $pagination]);
+    }
+    
     public function find($id){
         $model = Producto::find($id);
         if($model){
@@ -91,6 +157,27 @@ class ProductoController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
+    
+    public function related($id){
+
+        $producto = Producto::select('producto.id', 'grupo.id as grupo')
+        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->where('producto.id', $id)
+        ->first();
+
+        $related = Producto::select('producto.*')
+        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->where('grupo.id', $producto->grupo)
+        ->with('empresa')
+        ->take(9)
+        ->get();
+    
+        return response()->json(['data' => $related]);
+    }
 
     public function save($request, $model, $rules, $fields){
         $this->validate($request, $rules);
@@ -104,5 +191,58 @@ class ProductoController extends Controller
         else{
             return response()->json(['data' => $res], 422);
         }
+    }
+    
+    public function tree(){
+        $sql = Producto::select(
+                'clase.descripcion as clase', 'clase.id as clase_id', 'grupo.descripcion as grupo', 
+                'grupo.id as grupo_id', 'empresa.nombre as empresa', 'empresa.id as empresa_id')
+            ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
+            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+            ->groupBy('clase', 'grupo', 'empresa')
+            ->get();
+
+        $tree = array();
+        $clases = [];
+        foreach($sql as $row){
+
+            $clase = $row['clase'];
+            $clase_id = $row['clase_id'];
+            $grupo = $row['grupo'];
+            $grupo_id = $row['grupo_id'];
+            $empresa = $row['empresa'];
+            $empresa_id = $row['empresa_id'];
+
+            if(in_array($clase, $clases)){
+                for ($i=0; $i < count($tree) ; $i++) { 
+                    if($tree[$i]['nombre'] == $clase){
+                        $added = false;
+                        for($j=0;$j<count($tree[$i]['grupos']);$j++) {
+                            if($tree[$i]['grupos'][$j]['nombre']==$grupo){
+                                $tree[$i]['grupos'][$j]['empresas'][] = ['nombre'=> $empresa, 'id'=>$empresa_id];
+                                $added = true;
+                            }
+                        }
+                        if(!$added){
+                            $empresas = array();
+                            $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
+                            $tree[$i]['grupos'][] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
+                        }
+                    }
+                }
+            }
+            else{
+                $grupos = array();
+                $empresas = array();
+                $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
+                $grupos[] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
+                $tree[] = ['nombre'=>$clase, 'id'=>$clase_id, 'grupos'=>$grupos];
+                $clases[] = $clase;
+            }
+        }
+
+        return response()->json(['data' => $tree]);
     }
 }
