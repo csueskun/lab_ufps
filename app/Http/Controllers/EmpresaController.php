@@ -7,16 +7,16 @@ use App\Empresa;
 class EmpresaController extends Controller
 {
     protected $fields = [
-        'codemp', 'nombre', 'descripcion', 'nomcorto', 'telefono', 
-        'celular1', 'celular2', 'direccion', 'email', 'contacto', 
+        'codemp', 'nombre', 'descripcion',  'direccion', 'telefono', 'nomcorto', 
+        'celular1', 'celular2',  'email', 'contacto', 
         'descrip_comida', 'rutalogo', 'rutafoto', 'coordenadax', 
         'coordenaday', 'valor_contrato', 'sitioweb', 'instagram', 'facebook', 'fechaini_actividad', 'prioridad', 
         'observacion', 'etiquetas', 'estado', 'ciudad_id', 'rutafoto2', 'rutafoto3'];
 
     protected $rules = [
         'codemp' => 'required|unique:empresa', 'nombre' => 'required|unique:empresa', 'descripcion' => 'required', 
-        'nomcorto' => '', 'telefono' => 'required', 'celular1' => '', 'celular2' => '', 
-        'direccion' => 'required', 'email' => '', 'contacto' => '', 'descrip_comida' => 'required', 
+        'direccion' => 'required', 'telefono' => 'required', 'nomcorto' => '', 'celular1' => '', 'celular2' => '', 
+        'email' => '', 'contacto' => '', 'descrip_comida' => '', 
         'rutalogo' => '', 'rutafoto' => '', 'coordenadax' => '', 'coordenaday' => '', 
         'valor_contrato' => '', 'sitioweb' => '', 'instagram' => '', 'facebook' => '', 'fechaini_actividad' => '', 'prioridad' => '', 
         'observacion' => '', 'etiquetas' => '', 'estado' => '' ,'ciudad_id' => 'required' , 'rutafoto2' => '', 'rutafoto3' => ''
