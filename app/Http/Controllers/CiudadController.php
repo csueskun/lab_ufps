@@ -8,7 +8,7 @@ class CiudadController extends Controller
 {
     protected $fields = [
         'codigo','nombre','estado'
-		];
+    ];
 
     protected $rules = [
         'codigo'=>'required|unique:ciudad','nombre'=>'required|unique:ciudad','estado'=>'required'
