@@ -124,7 +124,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/ciudad/{id}', 'CiudadController@put');
     $router->patch('/ciudad/{id}', 'CiudadController@patch');
     $router->delete('/ciudad/{id}', 'CiudadController@delete');
-
 	
 	
 });
