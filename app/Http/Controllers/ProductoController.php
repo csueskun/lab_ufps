@@ -10,7 +10,7 @@ class ProductoController extends Controller
 	'codigo' ,   'descripcion' ,   'detalle' ,   'empresa_id' ,
     'tipoproducto_id' ,  'tipocategoria_id'  ,  'observacion'  ,  'tamano' ,
     'precio1'  ,   'precio2'  ,   'precio3'  ,   'precio4'  ,
-    'imagen' ,   'prioridad' ,   'estado' ,   'etiquetas' ,   'bodega' ,
+    'imagen' , 'imagen2' , 'imagen3' ,  'prioridad' ,   'estado' ,   'etiquetas' ,   'bodega' ,
     'unidad' ,   'marca'  ,   'terminado' ,   'compuesto' ,   'combo' ,   'iva' ,   'impco' 
      ];
 
@@ -18,7 +18,7 @@ class ProductoController extends Controller
         'codigo' => 'required|unique:producto', 'descripcion' => 'required|unique:producto',  'detalle' => 'required', 
         'empresa_id' => 'required', 'tipoproducto_id' => 'required', 'tipocategoria_id' => 'required', 'observacion' => '', 
         'tamano' => 'required', 'precio1' => 'required', 'precio2' => '', 'precio3' => '', 
-        'precio4' => '', 'imagen' => '', 'impco' => '', 'iva' => '', 'combo' => '', 'compuesto' => '', 
+        'precio4' => '', 'imagen' => '', 'imagen2' => '', 'imagen3' => '','impco' => '', 'iva' => '', 'combo' => '', 'compuesto' => '', 
         'unidad' => '', 'marca' => '', 'terminado' => '', 'prioridad' => 'required', 
         'bodega' => '', 'etiquetas' => '', 'estado' => 'required'
     ];
