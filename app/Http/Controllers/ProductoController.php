@@ -33,10 +33,10 @@ class ProductoController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = Producto::where($params)->with('empresa')->get();
+            $res = Producto::where($params)->with('empresa')->with('tipoproducto')->get();
         }
         else{
-            $res = Producto::whereRaw($whereRaw)->with('empresa')->get();
+            $res = Producto::whereRaw($whereRaw)->with('empresa')->with('tipoproducto')->get();
         }
         return response()->json(['data' => $res]);
     }

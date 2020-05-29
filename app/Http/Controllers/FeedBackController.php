@@ -14,7 +14,7 @@ class FeedbackController extends Controller
     protected $rules = [
         'empresa_id' => 'required|unique:feedback', 'visitas' => '', 'likes' => '', 
         'favorito' => '', 'comida' => '', 'servicio' => '', 'precios' => '', 
-        'infraestructura' => '', 'personal' => '', 'puntaje' => '', 'estado' => 'required'
+        'infraestructura' => '', 'personal' => '', 'estado' => 'required' , 'puntaje' => ''
     ];
     
     public function all(){
