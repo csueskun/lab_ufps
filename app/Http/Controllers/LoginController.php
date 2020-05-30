@@ -35,7 +35,7 @@ class LoginController extends Controller
             $user->api_token = $apiToken;
             return response()->json(['user'=>$user]);
         }else{
-            return response()->json(['msg'=>'Nombre de usuario o contraseña equivocados'], 401);
+            return response()->json(['msg'=>'Usuario o contraseña equivocados'], 401);
         }
     }
 
