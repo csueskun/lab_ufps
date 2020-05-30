@@ -70,7 +70,7 @@ class ProductoController extends Controller
         if(array_key_exists('search', $params)){
             if($params['search'] != ''){
                 $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
-                $pagination->pagination->search = intval($params['search']);
+                $pagination->pagination->search = $params['search'];
             }
         }    
 
