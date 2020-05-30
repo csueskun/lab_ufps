@@ -26,13 +26,16 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
         $user = User::where('usuario', $request->input('usuario'))->first();
+        if(!$user){
+            return response()->json(['msg'=>'Usuario no encontrado'], 401);
+        }
         if(Hash::check($request->input('password'), $user->password)){
             $apiToken = base64_encode($this->generateRandomString(40));
             User::where('usuario', $request->input('usuario'))->update(['api_token' => "$apiToken"]);
             $user->api_token = $apiToken;
             return response()->json(['user'=>$user]);
         }else{
-            return response()->json([], 401);
+            return response()->json(['msg'=>'Nombre de usuario o contraseña equivocados'], 401);
         }
     }
 
