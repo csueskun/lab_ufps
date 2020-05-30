@@ -21,6 +21,11 @@ $router->get('/hola', function () use ($router) {
 $router->post('/login', 'LoginController@login');
 
 
+$router->get('/paginated/producto', 'ProductoController@paginate');
+$router->get('/product-tree', 'ProductoController@tree');
+$router->get('/related-products/{id}', 'ProductoController@related');
+
+
 // GRUPO DE RUTAS QUE NECESITAN AUTENTICACION
 $router->group(['middleware' => 'auth'], function () use ($router) {
 
@@ -109,13 +114,10 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 	// PRODUCTO
     $router->get('/producto', 'ProductoController@get');
     $router->get('/producto/{id}', 'ProductoController@find');
-    $router->get('/paginated/producto', 'ProductoController@paginate');
     $router->post('/producto', 'ProductoController@new');
     $router->put('/producto/{id}', 'ProductoController@put');
     $router->patch('/producto/{id}', 'ProductoController@patch');
     $router->delete('/producto/{id}', 'ProductoController@delete');
-    $router->get('/product-tree', 'ProductoController@tree');
-    $router->get('/related-products/{id}', 'ProductoController@related');
 	
 	// CIUDAD
     $router->get('/ciudad', 'CiudadController@get');
@@ -124,6 +126,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/ciudad/{id}', 'CiudadController@put');
     $router->patch('/ciudad/{id}', 'CiudadController@patch');
     $router->delete('/ciudad/{id}', 'CiudadController@delete');
-	
 	
 });
