@@ -13,10 +13,10 @@ class Producto extends Model
     }
 	
 	  public function tipoproducto(){
-        return $this->belongsTo('App\Tipoproducto');
+        return $this->belongsTo('App\TipoProducto');
     }
 	
 	  public function tipocategoria(){
-        return $this->belongsTo('App\Tipocategoria');
+        return $this->belongsTo('App\TipoCategoria');
     }
 }
