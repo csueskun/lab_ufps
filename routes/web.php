@@ -24,6 +24,7 @@ $router->post('/login', 'LoginController@login');
 $router->get('/paginated/producto', 'ProductoController@paginate');
 $router->get('/product-tree', 'ProductoController@tree');
 $router->get('/related-products/{id}', 'ProductoController@related');
+$router->post('/usuario', 'UsuarioController@new');
 
 
 // GRUPO DE RUTAS QUE NECESITAN AUTENTICACION
@@ -126,5 +127,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/ciudad/{id}', 'CiudadController@put');
     $router->patch('/ciudad/{id}', 'CiudadController@patch');
     $router->delete('/ciudad/{id}', 'CiudadController@delete');
+
+	// USERS
+    $router->get('/usuario', 'UsuarioController@get');
+    $router->get('/usuario/{id}', 'UsuarioController@find');
+    $router->put('/usuario/{id}', 'UsuarioController@put');
+    $router->patch('/usuario/{id}', 'UsuarioController@patch');
+    $router->delete('/usuario/{id}', 'UsuarioController@delete');
 	
 });

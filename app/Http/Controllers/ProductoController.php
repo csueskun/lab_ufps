@@ -67,15 +67,23 @@ class ProductoController extends Controller
             $where['empresa.id'] = $params['empresa']; 
             $pagination->pagination->empresa = intval($params['empresa']);
         }    
+        if(array_key_exists('search', $params)){
+            if($params['search'] != ''){
+                $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
+                $pagination->pagination->search = $params['search'];
+            }
+        }    
 
-        $total = Producto::select('clase.id')
+        $total = Producto::select('producto.id')
         ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
         ->where($where)
-        ->count();
-
+        ->distinct()
+        ->get();
+        
+        $total = count($total);
         $pagination->pagination->last_page =  ceil($total/$per_page);
 
         if($current_page>$pagination->pagination->last_page){
@@ -92,6 +100,7 @@ class ProductoController extends Controller
             ->with('empresa')
             ->skip($skip)
             ->take($per_page)
+            ->distinct()
             ->get();
         
         $pagination->pagination->current_page =  $current_page;
