@@ -13,8 +13,8 @@ class UsuarioController extends Controller
 
     protected $rules = [
         'usuario' => 'required|unique:users', 'nombres' => 'required',
-        'apellidos' => 'required', 'email' => 'required',
-        'password' => 'required', 'celular' => 'required',
+        'apellidos' => 'required', 'email' => 'required|unique:users',
+        'password' => 'required', 'celular' => 'required|unique:users',
         'fecnaci' => 'required', 'direccion' => 'required'
     ];
     
