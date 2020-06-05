@@ -7,12 +7,13 @@ use App\Oferta;
 class OfertaController extends Controller
 {
     protected $fields = [
-        'empresa_id', 'fechaini', 'fechafin', 'rutafoto',  'tipo', 'likes', 
+        'empresa_id', 'fechaini', 'fechafin', 'horaini', 'horafin', 'rutafoto',  'tipo', 'likes', 
         'estado',   'prioridad'
 		];
 
     protected $rules = [
         'empresa_id' => 'required:news', 'fechaini' => 'required:news',  'fechafin' => 'required',
+        'horaini' => 'required',  'horafin' => 'required',
         'rutafoto' => '', 'tipo' => 'required', 'likes' => '', 'estado' => 'required', 
           'prioridad' => 'requiered'
     ];
