@@ -12,10 +12,10 @@ class OfertaController extends Controller
 		];
 
     protected $rules = [
-        'empresa_id' => 'required:news', 'fechaini' => 'required:news',  'fechafin' => 'required',
+        'empresa_id' => 'required:oferta', 'fechaini' => 'required:oferta',  'fechafin' => 'required',
         'horaini' => 'required',  'horafin' => 'required',
         'rutafoto' => '', 'tipo' => 'required', 'likes' => '', 'estado' => 'required', 
-          'prioridad' => 'requiered'
+        'prioridad' => 'requiered'
     ];
     
     public function all(){
