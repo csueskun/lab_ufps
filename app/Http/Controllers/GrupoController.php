@@ -7,11 +7,11 @@ use App\Grupo;
 class GrupoController extends Controller
 {
     protected $fields = [
-        'descripcion','estado','clase_id','imagen'
+        'descripcion','estado','clase_id','imagen', 'icono'
 		];
 
     protected $rules = [
-        'descripcion'=>'required|unique:grupo','estado'=>'required','clase_id'=>'required','imagen'=>''
+        'descripcion'=>'required|unique:grupo','estado'=>'required','clase_id'=>'required', 'imagen'=>'','icono'=>''
     ];
     
     public function all(){

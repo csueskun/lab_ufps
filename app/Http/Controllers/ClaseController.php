@@ -7,11 +7,11 @@ use App\Clase;
 class ClaseController extends Controller
 {
     protected $fields = [
-        'descripcion','estado'
+        'descripcion','estado','imagen','icono'
 		];
 
     protected $rules = [
-        'descripcion'=>'required|unique:clase','estado'=>'required'
+        'descripcion'=>'required|unique:clase','estado'=>'required', 'imagen'=>'','icono'=>''
     ];
     
     public function all(){
