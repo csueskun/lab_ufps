@@ -7,11 +7,12 @@ use App\TipoProducto;
 class TipoProductoController extends Controller
 {
     protected $fields = [
-        'codigo','descripcion','prioridad','estado'];
+        'codigo','descripcion','prioridad','estado','icono'
+    ];
 
     protected $rules = [
         'codigo'=>'required|unique:tipoproducto','descripcion'=>'required|unique:tipoproducto',
-		'prioridad'=>'required','estado'=>'required'
+		'prioridad'=>'required','estado'=>'required', 'icono' =>''
     ];
     
     public function all(){

@@ -7,12 +7,12 @@ use App\Servicio;
 class ServicioController extends Controller
 {
     protected $fields = [
-	'descripcion' ,   'prioridad' ,   'estado'  
+	'descripcion' ,   'prioridad' ,   'estado' ,'icono' 
      ];
 
     protected $rules = [
         'descripcion' => 'required|unique:servicio', 'prioridad' => 'required', 
-        'estado' => 'required'
+        'estado' => 'required',  'icono' => ''
     ];
     
     public function all(){
