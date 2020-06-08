@@ -204,8 +204,8 @@ class ProductoController extends Controller
     
     public function tree(){
         $sql = Producto::select(
-                'clase.descripcion as clase', 'clase.id as clase_id', 'grupo.descripcion as grupo', 
-                'grupo.id as grupo_id', 'empresa.nombre as empresa', 'empresa.id as empresa_id')
+                'clase.descripcion as clase', 'clase.id as clase_id', 'clase.icono as clase_icono', 'grupo.descripcion as grupo', 
+                'grupo.id as grupo_id', 'grupo.icono as grupo_icono', 'empresa.nombre as empresa', 'empresa.id as empresa_id')
             ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
             ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
             ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
@@ -219,8 +219,10 @@ class ProductoController extends Controller
 
             $clase = $row['clase'];
             $clase_id = $row['clase_id'];
+            $clase_icono = $row['clase_icono'];
             $grupo = $row['grupo'];
             $grupo_id = $row['grupo_id'];
+            $grupo_icono = $row['grupo_icono'];
             $empresa = $row['empresa'];
             $empresa_id = $row['empresa_id'];
 
@@ -237,7 +239,7 @@ class ProductoController extends Controller
                         if(!$added){
                             $empresas = array();
                             $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
-                            $tree[$i]['grupos'][] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
+                            $tree[$i]['grupos'][] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'icono'=> $grupo_icono, 'empresas'=>$empresas];
                         }
                     }
                 }
@@ -246,8 +248,8 @@ class ProductoController extends Controller
                 $grupos = array();
                 $empresas = array();
                 $empresas[] = ['nombre'=> $empresa, 'id'=>$empresa_id];
-                $grupos[] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'empresas'=>$empresas];
-                $tree[] = ['nombre'=>$clase, 'id'=>$clase_id, 'grupos'=>$grupos];
+                $grupos[] = ['nombre'=> $grupo, 'id'=> $grupo_id, 'icono'=> $grupo_icono, 'empresas'=>$empresas];
+                $tree[] = ['nombre'=>$clase, 'id'=>$clase_id, 'icono'=>$clase_icono, 'grupos'=>$grupos];
                 $clases[] = $clase;
             }
         }
