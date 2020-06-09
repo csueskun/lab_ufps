@@ -12,5 +12,9 @@ class Empresa extends Model
         return $this->belongsTo('App\Ciudad');
     }
 
+    public function productos(){
+        return $this->hasMany('App\Producto');
+    }
+
 
 }
