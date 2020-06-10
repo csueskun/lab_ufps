@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\GrupoEmpresa;
+use App\GrupoEmpresa;       
+
 
 class GrupoEmpresaController extends Controller
 {
