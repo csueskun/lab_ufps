@@ -16,5 +16,10 @@ class Empresa extends Model
         return $this->hasMany('App\Producto');
     }
 
+    public function feedback()
+    {
+        return $this->hasOne('App\Feedback');
+    }
+
 
 }
