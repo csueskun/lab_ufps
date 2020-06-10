@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\EmpGrupo;
+use App\GrupoEmpresa;
 
-class EmpGrupoController extends Controller
+class GrupoEmpresaController extends Controller
 {
     protected $fields = [
         'empresa_id','grupo_id','estado','prioridad'
@@ -24,16 +24,16 @@ class EmpGrupoController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = EmpGrupo::where($params)->with('empresa')->get();
+            $res = GrupoEmpresa::where($params)->with('empresa')->get();
         }
         else{
-            $res = EmpGrupo::whereRaw($whereRaw)->with('empresa')->get();
+            $res = GrupoEmpresa::whereRaw($whereRaw)->with('empresa')->get();
         }
         return response()->json(['data' => $res]);
     }
     
     public function find($id){
-        $model = EmpGrupo::find($id);
+        $model = GrupoEmpresa::find($id);
         if($model){
             return response()->json(['data' => $model]);
         }
@@ -43,17 +43,17 @@ class EmpGrupoController extends Controller
     }
     
     public function new(Request $request){
-        return $this->save($request, new EmpGrupo, $this->rules, $this->fields);
+        return $this->save($request, new GrupoEmpresa, $this->rules, $this->fields);
     }
     
     public function put(Request $request, $id){
         $rules = $this->rules;
      
         $rules['empresa_id'] .= ',empresa_id,'.$id;
-        $rules['grupo_id'] .= ',grupo_id,'.$id;
+        $rules['grupo_id']   .= ',grupo_id,'.$id;
         
         $fields = $this->fields;
-        return $this->save($request, EmpGrupo::find($id), $rules, $fields);
+        return $this->save($request, GrupoEmpresa::find($id), $rules, $fields);
     }
     
     public function patch(Request $request, $id){
@@ -74,11 +74,11 @@ class EmpGrupoController extends Controller
                 unset($fields[$i]);
             }
         }
-        return $this->save($request, EmpGrupo::find($id), $rules, $fields);
+        return $this->save($request, GrupoEmpresa::find($id), $rules, $fields);
     }
     
     public function delete(Request $request, $id){
-        $res = EmpGrupo::destroy($id);
+        $res = GrupoEmpresa::destroy($id);
         if($res){
             return response()->json(['data' => $model]);
         }
