@@ -73,12 +73,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->delete('/grupo/{id}', 'GrupoController@delete');
 	
     // EMPGRUPO
-    $router->get('/empgrupo', 'EmpGrupoController@get');
-    $router->get('/empgrupo/{id}', 'EmpGrupoController@find');
-    $router->post('/empgrupo', 'EmpGrupoController@new');
-    $router->put('/empgrupo/{id}', 'EmpGrupoController@put');
-    $router->patch('/empgrupo/{id}', 'EmpGrupoController@patch');
-    $router->delete('/empgrupo/{id}', 'EmpGrupoController@delete');
+    $router->get('/grupoempresa', 'GrupoEmpresaController@get');
+    $router->get('/grupoempresa/{id}', 'GrupoEmpresaController@find');
+    $router->post('/grupoempresa', 'GrupoEmpresaController@new');
+    $router->put('/grupoempresa/{id}', 'GrupoEmpresaController@put');
+    $router->patch('/grupoempresa/{id}', 'GrupoEmpresaController@patch');
+    $router->delete('/grupoempresa/{id}', 'GrupoEmpresaController@delete');
 	
     //FEEDBACK
 	$router->get('/feedback', 'FeedbackController@get');
