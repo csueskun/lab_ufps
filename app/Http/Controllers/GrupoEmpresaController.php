@@ -8,11 +8,11 @@ use App\GrupoEmpresa;
 class GrupoEmpresaController extends Controller
 {
     protected $fields = [
-        'empresa_id','grupo_id','estado','prioridad'
+        'created_at', 'empresa_id','grupo_id','estado','prioridad' 
 		];
 
     protected $rules = [
-        'empresa_id'=>'required|unique:grupoempresa','grupo_id'=>'required|unique:grupoempresa', 'estado'=>'required', 'prioridad'=>'required'
+        'created_at'=>'required|unique:grupoempresa', 'empresa_id'=>'required','grupo_id'=>'required', 'estado'=>'required', 'prioridad'=>'required'
     ];
     
     public function all(){
@@ -25,10 +25,10 @@ class GrupoEmpresaController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = GrupoEmpresa::where($params)->with('empresa')->get();
+            $res = GrupoEmpresa::where($params)->with('empresa')->with('grupo')->get();
         }
         else{
-            $res = GrupoEmpresa::whereRaw($whereRaw)->with('empresa')->get();
+            $res = GrupoEmpresa::whereRaw($whereRaw)->with('empresa')->with('grupo')->get();
         }
         return response()->json(['data' => $res]);
     }
@@ -50,8 +50,7 @@ class GrupoEmpresaController extends Controller
     public function put(Request $request, $id){
         $rules = $this->rules;
      
-        $rules['empresa_id'] .= ',empresa_id,'.$id;
-        $rules['grupo_id']   .= ',grupo_id,'.$id;
+        $rules['created_at'] .= ',created_at,'.$id;
         
         $fields = $this->fields;
         return $this->save($request, GrupoEmpresa::find($id), $rules, $fields);
@@ -60,8 +59,7 @@ class GrupoEmpresaController extends Controller
     public function patch(Request $request, $id){
         $rules = $this->rules;
         
-        $rules['empresa_id'] .= ',empresa_id,'.$id;
-        $rules['grupo_id'] .= ',grupo_id,'.$id;
+        $rules['created_at'] .= ',created_at,'.$id;
         
         $fields = $this->fields;
         foreach ($rules as $key => $value) {
