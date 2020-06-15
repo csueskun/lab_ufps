@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Feedback;
+use App\Evento;
 
-class FeedbackController extends Controller
+class EventoController extends Controller
 {
     protected $fields = [
-	   'empresa_id','visitas','likes','favorito','comida',
-       'servicio','precios','infraestructura','personal','estado','puntaje'
-       ];
+	
+        'titulo', 'empresa_id', 'fechaini', 'fechafin',  'descripcion', 'resumen', 'likes', 
+        'rutafoto', 'estado',   'prioridad'];
 
     protected $rules = [
-        'empresa_id' => 'required', 'visitas' => '', 'likes' => '', 
-        'favorito' => '', 'comida' => '', 'servicio' => '', 'precios' => '', 
-        'infraestructura' => '', 'personal' => '', 'estado' => 'required' , 'puntaje' => ''
+        'titulo' => 'required|unique:evento', 'empresa_id' => 'required', 'fechaini' => 'required', 'fechafin' => 'required', 
+		 'descripcion' => 'required',  'resumen' => 'required', 'likes' => '', 'rutafoto' => '', 'estado' => 'required', 
+        'prioridad' => 'required'
     ];
     
     public function all(){
-        return response()->json(['data' => Feedback::all()]);
+        return response()->json(['data' => Evento::all()]);
     }
     
     public function get(Request $request){
@@ -27,16 +27,16 @@ class FeedbackController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = Feedback::where($params)->with('empresa')->get();
+            $res = Evento::where($params)->with('empresa')->get();
         }
         else{
-            $res = Feedback::whereRaw($whereRaw)->with('empresa')->get();
+            $res = Evento::whereRaw($whereRaw)->with('empresa')->get();
         }
         return response()->json(['data' => $res]);
     }
     
     public function find($id){
-        $model = Feedback::find($id);
+        $model = Evento::find($id);
         if($model){
             return response()->json(['data' => $model]);
         }
@@ -46,20 +46,21 @@ class FeedbackController extends Controller
     }
     
     public function new(Request $request){
-        return $this->save($request, new Feedback, $this->rules, $this->fields);
+        return $this->save($request, new Evento, $this->rules, $this->fields);
     }
     
     public function put(Request $request, $id){
         $rules = $this->rules;
-    
+        $rules['titulo'] .= ',titulo,'.$id;
         
-		$fields = $this->fields;
-        return $this->save($request, Feedback::find($id), $rules, $fields);
+        $fields = $this->fields;
+        return $this->save($request, Evento::find($id), $rules, $fields);
     }
     
     public function patch(Request $request, $id){
         $rules = $this->rules;
-		
+        $rules['titulo'] .= ',titulo,'.$id;
+        
         $fields = $this->fields;
         foreach ($rules as $key => $value) {
             if(!$request->has($key)){
@@ -72,11 +73,11 @@ class FeedbackController extends Controller
                 unset($fields[$i]);
             }
         }
-        return $this->save($request, Feedback::find($id), $rules, $fields);
+        return $this->save($request, Evento::find($id), $rules, $fields);
     }
     
     public function delete(Request $request, $id){
-        $res = Feedback::destroy($id);
+        $res = Evento::destroy($id);
         if($res){
             return response()->json(['data' => $model]);
         }
@@ -98,17 +99,4 @@ class FeedbackController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
-	
-	//  -----------------------------------------------------------------------------------
-	
-	public function last(){
-		$last = Feedback::orderBy('created_at', 'desc')->first();
-        return response()->json(['data' => $last], 200);
-	}
-	
-	public function first(){
-		$last = Feedback::orderBy('created_at', 'asc')->first();
-        return response()->json(['data' => $last], 200);
-	}
-	
 }
