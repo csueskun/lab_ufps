@@ -16,7 +16,7 @@ class GrupoEmpresaController extends Controller
     ];
     
     public function all(){
-        return response()->json(['data' => EmpGrupo::all()]);
+        return response()->json(['data' => GrupoEmpresa::all()]);
     }
     
     public function get(Request $request){
