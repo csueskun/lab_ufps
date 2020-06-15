@@ -14,7 +14,7 @@ class NewsController extends Controller
     protected $rules = [
         'titulo' => 'required|unique:news', 'empresa_id' => 'required', 'fechaini' => 'required', 'fechafin' => 'required', 
 		 'descripcion' => 'required',  'resumen' => 'required', 'likes' => '', 'rutafoto' => '', 'estado' => 'required', 
-        'prioridad' => 'requiered'
+        'prioridad' => 'required'
     ];
     
     public function all(){

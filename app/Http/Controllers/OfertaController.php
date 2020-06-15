@@ -7,15 +7,15 @@ use App\Oferta;
 class OfertaController extends Controller
 {
     protected $fields = [
-        'empresa_id', 'fechaini', 'fechafin', 'horaini', 'horafin', 'rutafoto',  'tipo', 'likes', 
+        'empresa_id', 'fechaini', 'fechafin', 'descripcion', 'rutafoto',  'tipo', 'likes', 
         'estado',   'prioridad'
 		];
 
     protected $rules = [
-        'empresa_id' => 'required:oferta', 'fechaini' => 'required:oferta',  'fechafin' => 'required',
-        'horaini' => 'required',  'horafin' => 'required',
+        'descripcion' => 'required|unique:oferta', 'empresa_id' => 'required', 
+        'fechaini' => 'required',  'fechafin' => 'required',
         'rutafoto' => '', 'tipo' => 'required', 'likes' => '', 'estado' => 'required', 
-        'prioridad' => 'requiered'
+        'prioridad' => 'required'
     ];
     
     public function all(){
@@ -52,16 +52,14 @@ class OfertaController extends Controller
     
     public function put(Request $request, $id){
         $rules = $this->rules;
-        $rules['empresa_id'] .= ',empresa_id,'.$id;
-        $rules['fechaini'] .= ',fechaini,'.$id;
+        $rules['descripcion'] .= ',descripcion,'.$id;
         $fields = $this->fields;
         return $this->save($request, Oferta::find($id), $rules, $fields);
     }
     
     public function patch(Request $request, $id){
         $rules = $this->rules;
-        $rules['empresa_id'] .= ',empresa_id,'.$id;
-        $rules['fechaini'] .= ',fechaini,'.$id;
+        $rules['descripcion'] .= ',descripcion,'.$id;
         $fields = $this->fields;
         foreach ($rules as $key => $value) {
             if(!$request->has($key)){
