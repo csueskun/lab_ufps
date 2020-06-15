@@ -81,12 +81,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->delete('/grupoempresa/{id}', 'GrupoEmpresaController@delete');
 	
     //FEEDBACK
-	$router->get('/feedback', 'FeedbackController@get');
-    $router->get('/feedback/{id}', 'FeedbackController@find');
-    $router->post('/feedback', 'FeedbackController@new');
-    $router->put('/feedback/{id}', 'FeedbackController@put');
-    $router->patch('/feedback/{id}', 'FeedbackController@patch');
-    $router->delete('/feedback/{id}', 'FeedbackController@delete');
+	$router->get('/feedback', 'FeedBackController@get');
+    $router->get('/feedback/{id}', 'FeedBackController@find');
+    $router->post('/feedback', 'FeedBackController@new');
+    $router->put('/feedback/{id}', 'FeedBackController@put');
+    $router->patch('/feedback/{id}', 'FeedBackController@patch');
+    $router->delete('/feedback/{id}', 'FeedBackController@delete');
 	
 	//SERVICIO
 	$router->get('/servicio', 'ServicioController@get');
