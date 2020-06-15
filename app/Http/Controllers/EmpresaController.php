@@ -32,11 +32,11 @@ class EmpresaController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = Empresa::where($params)->with('ciudad')->get();
+            $res = Empresa::where($params)->with('ciudad')->with('feedback')->get();
         }
         else{
             $whereRaw = str_replace('s3lect', 'select', $whereRaw);
-            $res = Empresa::whereRaw($whereRaw)->with('ciudad')->get();
+            $res = Empresa::whereRaw($whereRaw)->with('ciudad')->with('feedback')->get();
         }
         return response()->json(['data' => $res]);
     }
