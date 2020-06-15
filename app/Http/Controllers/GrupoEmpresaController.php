@@ -25,10 +25,13 @@ class GrupoEmpresaController extends Controller
         unset($params['api_token']);
         unset($params['where_raw']);
         if(!$whereRaw){
-            $res = GrupoEmpresa::where($params)->with('empresa')->with('grupo')->get();
+            $res = GrupoEmpresa::where($params)->with('empresa')->get();
+            $res = GrupoEmpresa::where($params)->with('grupo')->get();
         }
         else{
-            $res = GrupoEmpresa::whereRaw($whereRaw)->with('empresa')->with('grupo')->get();
+            $res = GrupoEmpresa::whereRaw($whereRaw)->with('empresa')->get();
+            $res = GrupoEmpresa::whereRaw($whereRaw)->with('grupo')->get();
+
         }
         return response()->json(['data' => $res]);
     }
