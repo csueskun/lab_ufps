@@ -149,6 +149,9 @@ class EmpresaController extends Controller
         if($current_page>$pagination->pagination->last_page){
             $current_page = $pagination->pagination->last_page;
         }
+        elseif($current_page<1){
+            $current_page = 1;
+        }
         $skip = $per_page * ($current_page-1);
 
         $data = Empresa::select('empresa.*')
