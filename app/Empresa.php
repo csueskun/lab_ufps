@@ -21,5 +21,4 @@ class Empresa extends Model
         return $this->hasOne('App\Feedback');
     }
 
-
 }
