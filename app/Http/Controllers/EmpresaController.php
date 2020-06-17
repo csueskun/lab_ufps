@@ -105,4 +105,75 @@ class EmpresaController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
+
+    public function paginate(Request $request){
+        $per_page = 10;
+        $current_page = 1;
+        $params = $request->request->all();
+        if(array_key_exists('per_page', $params)){
+            $per_page = intval($params['per_page']);
+        }
+        if(array_key_exists('current_page', $params)){
+            $current_page = intval($params['current_page']);
+        }
+        $where = [];
+        $pagination = new \stdClass;
+        $pagination->pagination = new \stdClass;
+
+        if(array_key_exists('clase', $params)){
+            $where['clase.id'] = $params['clase']; 
+            $pagination->pagination->clase = intval($params['clase']);
+        }
+        if(array_key_exists('grupo', $params)){
+            $where['grupo.id'] = $params['grupo']; 
+            $pagination->pagination->grupo = intval($params['grupo']);
+        }
+        if(array_key_exists('search', $params)){
+            if($params['search'] != ''){
+                $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
+                $pagination->pagination->search = $params['search'];
+            }
+        }    
+
+        $total = Empresa::select('empresa.id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->where($where)
+        ->distinct()
+        ->get();
+        
+        $total = count($total);
+        $pagination->pagination->last_page =  ceil($total/$per_page);
+
+        if($current_page>$pagination->pagination->last_page){
+            $current_page = $pagination->pagination->last_page;
+        }
+        elseif($current_page<1){
+            $current_page = 1;
+        }
+        $skip = $per_page * ($current_page-1);
+
+        $data = Empresa::select('empresa.*')
+            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+            ->where($where)
+            ->skip($skip)
+            ->take($per_page)
+            ->distinct()
+            ->get();
+        
+        $pagination->pagination->current_page =  $current_page;
+        $pagination->pagination->per_page =  $per_page;
+        $pagination->pagination->total =  $total;
+        $from = $skip + 1;
+        $pagination->pagination->from =  $from;
+        $to = ($total < $from + $per_page) ? $total : $per_page * $current_page;
+        $pagination->pagination->to =  $to;
+        $pagination->pagination->showing =  $to - $from + 1;
+        $pagination->data =  $data;
+        
+        return response()->json(['data' => $pagination]);
+    }
 }
