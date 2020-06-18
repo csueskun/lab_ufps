@@ -15,7 +15,7 @@ class ProductoController extends Controller
      ];
 
     protected $rules = [
-        'codigo' => 'required|unique:producto', 'descripcion' => 'required|unique:producto',  'detalle' => 'required', 
+        'codigo' => 'required|unique:producto', 'descripcion' => 'required',  'detalle' => 'required', 
         'empresa_id' => 'required', 'tipoproducto_id' => 'required', 'tipocategoria_id' => 'required', 'observacion' => '', 
         'tamano' => 'required', 'precio1' => 'required', 'precio2' => '', 'precio3' => '', 
         'precio4' => '', 'imagen' => '', 'imagen2' => '', 'imagen3' => '','impco' => '', 'iva' => '', 'combo' => '', 'compuesto' => '', 
