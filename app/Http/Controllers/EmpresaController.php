@@ -107,7 +107,7 @@ class EmpresaController extends Controller
     }
 
     public function paginate(Request $request){
-        $per_page = 10;
+        $per_page = 30;
         $current_page = 1;
         $params = $request->request->all();
         if(array_key_exists('per_page', $params)){
