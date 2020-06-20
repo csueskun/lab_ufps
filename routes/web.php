@@ -80,6 +80,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/grupoempresa/{id}', 'GrupoEmpresaController@put');
     $router->patch('/grupoempresa/{id}', 'GrupoEmpresaController@patch');
     $router->delete('/grupoempresa/{id}', 'GrupoEmpresaController@delete');
+    $router->get('/paginated/grupoempresa', 'GrupoEmpresaController@paginate');
 	
     //FEEDBACK
 	$router->get('/feedback', 'FeedBackController@get');
