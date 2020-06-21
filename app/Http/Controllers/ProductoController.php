@@ -66,13 +66,13 @@ class ProductoController extends Controller
         if(array_key_exists('empresa', $params)){
             $where['empresa.id'] = $params['empresa']; 
             $pagination->pagination->empresa = intval($params['empresa']);
-        }    
+        }
         if(array_key_exists('search', $params)){
             if($params['search'] != ''){
                 $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
                 $pagination->pagination->search = $params['search'];
             }
-        }    
+        }
 
         $total = Producto::select('producto.id')
         ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')

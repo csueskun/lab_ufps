@@ -128,18 +128,29 @@ class EmpresaController extends Controller
             $where['grupo.id'] = $params['grupo']; 
             $pagination->pagination->grupo = intval($params['grupo']);
         }
+        if(array_key_exists('grupo_in', $params)){
+            $pagination->pagination->grupo = intval($params['grupo_in']);
+        }
         if(array_key_exists('search', $params)){
             if($params['search'] != ''){
                 $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
                 $pagination->pagination->search = $params['search'];
             }
-        }    
-
-        $total = Empresa::select('empresa.id')
+        }
+        if(array_key_exists('nombre', $params)){
+            $where[] = ['empresa.nombre', 'like', '%'.$params['nombre'].'%']; 
+            $pagination->pagination->nombre = intval($params['nombre']);
+        }
+        $total = new Empresa;
+        $total = $total->select('empresa.id')
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
-        ->where($where)
+        ->where($where);
+        if(array_key_exists('grupo_in', $params)){
+            $total = $total->whereIn('grupo.id', $params['grupo_in']);
+        }
+        $total = $total
         ->distinct()
         ->get();
         
@@ -154,15 +165,21 @@ class EmpresaController extends Controller
         }
         $skip = $per_page * ($current_page-1);
 
-        $data = Empresa::select('empresa.*')
-            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
-            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
-            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
-            ->where($where)
-            ->skip($skip)
-            ->take($per_page)
-            ->distinct()
-            ->get();
+        $data = new Empresa;
+        $data = $data
+        ->select('empresa.*')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->where($where);
+        if(array_key_exists('grupo_in', $params)){
+            $data = $data->whereIn('grupo.id', $params['grupo_in']);
+        }
+        $data = $data
+        ->skip($skip)
+        ->take($per_page)
+        ->distinct()
+        ->get();
         
         $pagination->pagination->current_page =  $current_page;
         $pagination->pagination->per_page =  $per_page;
