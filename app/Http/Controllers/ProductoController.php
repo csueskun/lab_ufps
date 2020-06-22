@@ -101,6 +101,7 @@ class ProductoController extends Controller
             ->join('clase', 'clase.id', '=', 'grupo.clase_id')
             ->where($where)
             ->with('empresa')
+            ->with('tipoproducto')
             ->skip($skip)
             ->take($per_page)
             ->distinct()

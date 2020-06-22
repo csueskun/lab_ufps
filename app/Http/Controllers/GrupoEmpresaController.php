@@ -66,6 +66,7 @@ class GrupoEmpresaController extends Controller
         ->join('empresa', 'empresa.id', '=', 'grupoempresa.empresa_id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->where($where)
+        ->with('grupo')
         ->distinct()
         ->get();
         
