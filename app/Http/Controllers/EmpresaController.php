@@ -139,7 +139,7 @@ class EmpresaController extends Controller
         }
         if(array_key_exists('nombre', $params)){
             $where[] = ['empresa.nombre', 'like', '%'.$params['nombre'].'%']; 
-            $pagination->pagination->nombre = intval($params['nombre']);
+            $pagination->pagination->nombre = $params['nombre'];
         }
         $total = new Empresa;
         $total = $total->select('empresa.id')
