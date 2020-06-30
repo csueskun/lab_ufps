@@ -22,6 +22,7 @@ $router->post('/login', 'LoginController@login');
 
 
 $router->get('/paginated/producto', 'ProductoController@paginate');
+$router->get('/paginated/empresa', 'EmpresaController@paginate');
 $router->get('/product-tree', 'ProductoController@tree');
 $router->get('/related-products/{id}', 'ProductoController@related');
 $router->post('/usuario', 'UsuarioController@new');
@@ -39,7 +40,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/empresa/{id}', 'EmpresaController@put');
     $router->patch('/empresa/{id}', 'EmpresaController@patch');
     $router->delete('/empresa/{id}', 'EmpresaController@delete');
-    $router->get('/paginated/empresa', 'EmpresaController@paginate');
 
     // TIPOPRODUCTO
     $router->get('/tipoproducto', 'TipoProductoController@get');
