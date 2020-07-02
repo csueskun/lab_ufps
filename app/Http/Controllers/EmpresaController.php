@@ -42,7 +42,7 @@ class EmpresaController extends Controller
     }
     
     public function find($id){
-        $model = Empresa::where('id', $id)->with('productos')->with('feedback')->first();
+        $model = Empresa::where('id', $id)->with('productos.tipoproducto')->with('feedback')->first();
         if($model){
             return response()->json(['data' => $model]);
         }
