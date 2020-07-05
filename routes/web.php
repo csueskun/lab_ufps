@@ -162,5 +162,13 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/usuario/{id}', 'UsuarioController@put');
     $router->patch('/usuario/{id}', 'UsuarioController@patch');
     $router->delete('/usuario/{id}', 'UsuarioController@delete');
+
+	// REGISTRO
+    $router->get('/registro', 'RegistroController@get');
+    $router->get('/registro/{id}', 'RegistroController@find');
+    $router->put('/registro/{id}', 'RegistroController@put');
+    $router->post('/registro', 'RegistroController@new');
+    $router->patch('/registro/{id}', 'RegistroController@patch');
+    $router->delete('/registro/{id}', 'RegistroController@delete');
 	
 });
