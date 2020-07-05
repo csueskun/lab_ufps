@@ -114,6 +114,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/oferta/{id}', 'OfertaController@put');
     $router->patch('/oferta/{id}', 'OfertaController@patch');
     $router->delete('/oferta/{id}', 'OfertaController@delete');
+    $router->get('/paginated/oferta', 'OfertaController@paginate');
 	
 	//NEWS
 	$router->get('/news', 'NewsController@get');
