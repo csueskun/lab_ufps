@@ -132,7 +132,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/evento/{id}', 'EventoController@put');
     $router->patch('/evento/{id}', 'EventoController@patch');
     $router->delete('/evento/{id}', 'EventoController@delete');
-	
+    $router->get('/paginated/evento', 'EventoController@paginate');
+    
     //ATENCION
 	$router->get('/atencion', 'AtencionController@get');
     $router->get('/atencion/{id}', 'AtencionController@find');
