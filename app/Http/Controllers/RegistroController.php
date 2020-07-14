@@ -21,7 +21,7 @@ class RegistroController extends Controller
     public function get(Request $request){
         $params = $request->request->all();
         unset($params['api_token']);
-        $res = Registro::where($params)->get();
+        $res = Registro::where($params)->with('empresa')->get();
         return response()->json(['data' => $res]);
     }
     
