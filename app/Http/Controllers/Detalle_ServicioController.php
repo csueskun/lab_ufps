@@ -64,7 +64,7 @@ class Detalle_ServicioController extends Controller
 
         $total = Detalle_Servicio::select('detalle_servicio.id')
         ->join('empresa', 'empresa.id', '=', 'detalle_servicio.empresa_id')
-        ->join('grupo', 'servicio.id', '=', 'detalle_servicio.grupo_id')
+        ->join('servicio', 'servicio.id', '=', 'detalle_servicio.servicio_id')
         ->where($where)
         ->distinct()
         ->get();
@@ -82,7 +82,7 @@ class Detalle_ServicioController extends Controller
 
         $data = Detalle_Servicio::select('detalle_servicio.*')
             ->join('empresa', 'empresa.id', '=', 'detalle_servicio.empresa_id')
-            ->join('servicio', 'servicio.id', '=', 'detalle_servicio.grupo_id')
+            ->join('servicio', 'servicio.id', '=', 'detalle_servicio.servicio_id')
             ->where($where)
             ->with('empresa')
             ->with('servicio')
