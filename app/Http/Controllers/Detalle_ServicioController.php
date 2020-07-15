@@ -8,7 +8,7 @@ use App\Detalle_Servicio;
 class Detalle_ServicioController extends Controller
 {
     protected $fields = [
-        'empresa_id','serivicio_id','estado' 
+        'empresa_id','servicio_id','estado' 
 		];
 
     protected $rules = [
