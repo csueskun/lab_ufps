@@ -48,6 +48,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/tipoproducto/{id}', 'TipoProductoController@put');
     $router->patch('/tipoproducto/{id}', 'TipoProductoController@patch');
     $router->delete('/tipoproducto/{id}', 'TipoProductoController@delete');
+    $router->get('/paginated/tipoproducto', 'TipoProductoController@paginate');
 	
 	// TIPOCATEGORIA
     $router->get('/tipocategoria', 'TipoCategoriaController@get');
@@ -56,6 +57,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/tipocategoria/{id}', 'TipoCategoriaController@put');
     $router->patch('/tipocategoria/{id}', 'TipoCategoriaController@patch');
     $router->delete('/tipocategoria/{id}', 'TipoCategoriaController@delete');
+    $router->get('/paginated/tipocategoria', 'TipoCategoriaController@paginate');
 	
 	// CLASE
     $router->get('/clase', 'ClaseController@get');
@@ -64,6 +66,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/clase/{id}', 'ClaseController@put');
     $router->patch('/clase/{id}', 'ClaseController@patch');
     $router->delete('/clase/{id}', 'ClaseController@delete');
+    $router->get('/paginated/clase', 'ClaseController@paginate');
 	
     // GRUPO
     $router->get('/grupo', 'GrupoController@get');
@@ -72,6 +75,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/grupo/{id}', 'GrupoController@put');
     $router->patch('/grupo/{id}', 'GrupoController@patch');
     $router->delete('/grupo/{id}', 'GrupoController@delete');
+    $router->get('/paginated/grupo', 'GrupoController@paginate');
 	
     // EMPGRUPO
     $router->get('/grupoempresa', 'GrupoEmpresaController@get');
@@ -98,6 +102,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/feedback/{id}', 'FeedBackController@put');
     $router->patch('/feedback/{id}', 'FeedBackController@patch');
     $router->delete('/feedback/{id}', 'FeedBackController@delete');
+    $router->get('/paginated/feedback', 'FeedBackController@paginate');
+	
 	
 	//SERVICIO
 	$router->get('/servicio', 'ServicioController@get');
@@ -106,6 +112,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/servicio/{id}', 'ServicioController@put');
     $router->patch('/servicio/{id}', 'ServicioController@patch');
     $router->delete('/servicio/{id}', 'ServicioController@delete');
+    $router->get('/paginated/servicio', 'ServicioController@paginate');
 	
 	//OFERTA
 	$router->get('/oferta', 'OfertaController@get');
@@ -141,6 +148,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/atencion/{id}', 'AtencionController@put');
     $router->patch('/atencion/{id}', 'AtencionController@patch');
     $router->delete('/atencion/{id}', 'AtencionController@delete');
+    $router->get('/paginated/atencion', 'AtencionController@paginate');
 	
 	// PRODUCTO
     $router->get('/producto', 'ProductoController@get');
@@ -157,6 +165,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/ciudad/{id}', 'CiudadController@put');
     $router->patch('/ciudad/{id}', 'CiudadController@patch');
     $router->delete('/ciudad/{id}', 'CiudadController@delete');
+    $router->get('/paginated/ciudad', 'CiudadController@paginate');
 
 	// USERS
     $router->get('/usuario', 'UsuarioController@get');
