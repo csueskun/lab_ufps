@@ -81,7 +81,6 @@ class FeedbackController extends Controller
             ->join('empresa', 'empresa.id', '=', 'feedback.empresa_id')
             ->where($where)
             ->with('empresa')
-            ->with('grupo')
             ->skip($skip)
             ->take($per_page)
             ->distinct()
