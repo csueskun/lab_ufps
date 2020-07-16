@@ -60,7 +60,7 @@ class FeedbackController extends Controller
             }
         }    
 
-        $total = FeedBack::select('feedback.id')
+        $total = Feedback::select('feedback.id')
         ->join('empresa', 'empresa.id', '=', 'feedback.empresa_id')
         ->where($where)
         ->distinct()
@@ -77,7 +77,7 @@ class FeedbackController extends Controller
         }
         $skip = $per_page * ($current_page-1);
 
-        $data = FeedBack::select('feedback.*')
+        $data = Feedback::select('feedback.*')
             ->join('empresa', 'empresa.id', '=', 'feedback.empresa_id')
             ->where($where)
             ->with('empresa')
