@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Empresa;
+use App\Feedback;
 
 class EmpresaController extends Controller
 {
@@ -44,6 +45,16 @@ class EmpresaController extends Controller
     public function find($id){
         $model = Empresa::where('id', $id)->with('productos.tipoproducto')->with('feedback')->first();
         if($model){
+
+            $feedback = Feedback::where('empresa_id', $id)->first();
+            if(!$feedback){
+                $feedback = new Feedback;
+                $feedback->empresa_id = $id;
+                $feedback->visitas = 0;
+            }
+            $feedback->visitas = $feedback->visitas + 1;
+            $feedback->save();
+
             return response()->json(['data' => $model]);
         }
         else{

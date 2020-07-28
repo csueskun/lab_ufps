@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Registro;
+use App\Feedback;
 
 class RegistroController extends Controller
 {
@@ -79,10 +80,31 @@ class RegistroController extends Controller
         }
         $res = $model->save();
         if($res){
+            $this->updateFeedback($model);
             return response()->json(['data' => $model]);
         }
         else{
             return response()->json(['data' => $res], 422);
         }
+    }
+
+    public function updateFeedback($reg){
+        $feedback = Feedback::where('empresa_id', $reg->empresa_id)->first();
+        if($reg->valor < 1){
+            $reg->valor = -1;
+        }
+        if(!$feedback){
+            $feedback = new Feedback;
+            $feedback->empresa_id = $reg->empresa_id;
+            $feedback->likes = 0;
+            $feedback->favorito = 0;
+        }
+        if($reg->tipoval == 1){
+            $feedback->likes = $feedback->likes + $reg->valor;
+        }
+        elseif($reg->tipoval == 2){
+            $feedback->favorito = $feedback->favorito + $reg->valor;
+        }
+        $feedback->save();
     }
 }
