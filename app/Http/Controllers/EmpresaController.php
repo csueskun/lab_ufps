@@ -142,12 +142,12 @@ class EmpresaController extends Controller
         if(array_key_exists('grupo_in', $params)){
             $pagination->pagination->grupo = intval($params['grupo_in']);
         }
-        if(array_key_exists('search', $params)){
-            if($params['search'] != ''){
-                $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
-                $pagination->pagination->search = $params['search'];
-            }
-        }
+        // if(array_key_exists('search', $params)){
+        //     if($params['search'] != ''){
+        //         $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
+        //         $pagination->pagination->search = $params['search'];
+        //     }
+        // }
         if(array_key_exists('nombre', $params)){
             $where[] = ['empresa.nombre', 'like', '%'.$params['nombre'].'%']; 
             $pagination->pagination->nombre = $params['nombre'];
@@ -157,9 +157,18 @@ class EmpresaController extends Controller
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
         if(array_key_exists('grupo_in', $params)){
             $total = $total->whereIn('grupo.id', $params['grupo_in']);
+        }
+        if(array_key_exists('search', $params)){
+            if($params['search'] != ''){
+                $param = $params['search'];
+                $total = $total->where(function($w) use($param){
+                    $w->where('empresa.nombre', 'like', '%'.$param.'%')->orWhere('producto.descripcion', 'like', '%'.$param.'%');
+                });
+            }
         }
         $total = $total
         ->distinct()
@@ -182,9 +191,18 @@ class EmpresaController extends Controller
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
         if(array_key_exists('grupo_in', $params)){
             $data = $data->whereIn('grupo.id', $params['grupo_in']);
+        }
+        if(array_key_exists('search', $params)){
+            if($params['search'] != ''){
+                $param = $params['search'];
+                $data = $data->where(function($w) use($param){
+                    $w->where('empresa.nombre', 'like', '%'.$param.'%')->orWhere('producto.descripcion', 'like', '%'.$param.'%');
+                });
+            }
         }
         $data = $data
         ->skip($skip)
