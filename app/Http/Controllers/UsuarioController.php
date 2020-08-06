@@ -9,7 +9,7 @@ class UsuarioController extends Controller
 {
     protected $fields = [
         'usuario', 'nombres', 'apellidos', 'email',  'password', 'celular', 
-        'fecnaci', 'direccion'];
+        'fecnaci', 'direccion', 'phone_id'];
 
     protected $rules = [
         'usuario' => 'required|unique:users', 'nombres' => 'required',
