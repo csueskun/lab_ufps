@@ -166,7 +166,9 @@ class EmpresaController extends Controller
             if($params['search'] != ''){
                 $param = $params['search'];
                 $total = $total->where(function($w) use($param){
-                    $w->where('empresa.nombre', 'like', '%'.$param.'%')->orWhere('producto.descripcion', 'like', '%'.$param.'%');
+                    $w->where('empresa.nombre', 'like', '%'.$param.'%')
+                    ->orWhere('producto.etiquetas', 'like', '%'.$param.'%')
+                    ->orWhere('producto.descripcion', 'like', '%'.$param.'%');
                 });
             }
         }
@@ -200,7 +202,9 @@ class EmpresaController extends Controller
             if($params['search'] != ''){
                 $param = $params['search'];
                 $data = $data->where(function($w) use($param){
-                    $w->where('empresa.nombre', 'like', '%'.$param.'%')->orWhere('producto.descripcion', 'like', '%'.$param.'%');
+                    $w->where('empresa.nombre', 'like', '%'.$param.'%')
+                    ->orWhere('producto.etiquetas', 'like', '%'.$param.'%')
+                    ->orWhere('producto.descripcion', 'like', '%'.$param.'%');
                 });
             }
         }
