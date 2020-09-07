@@ -80,7 +80,7 @@ class RegistroController extends Controller
         }
         $res = $model->save();
         if($res){
-            $this->updateFeedback($model);
+            return $this->updateFeedback($model);
             return response()->json(['data' => $model]);
         }
         else{
@@ -104,6 +104,14 @@ class RegistroController extends Controller
         }
         elseif($reg->tipoval == 2){
             $feedback->favorito = $feedback->favorito + $reg->valor;
+        }
+        else{
+            $avg = Registro::where('empresa_id', $reg->empresa_id)->where('tipoval', $reg->tipoval)->groupBy('empresa_id')->avg('valor');
+            if($reg->tipoval == 3){ $feedback->comida = $avg; }
+            elseif($reg->tipoval == 4){ $feedback->servicio = $avg; }
+            elseif($reg->tipoval == 5){ $feedback->precios = $avg; }
+            elseif($reg->tipoval == 6){ $feedback->infraestructura = $avg; }
+            elseif($reg->tipoval == 7){ $feedback->personal = $avg; }
         }
         $feedback->save();
     }
