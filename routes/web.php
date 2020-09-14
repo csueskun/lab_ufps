@@ -36,6 +36,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     // EMPRESA
     $router->get('/empresa', 'EmpresaController@get');
     $router->get('/empresa/{id}', 'EmpresaController@find');
+    $router->get('/empresa-comentarios/{id}', 'EmpresaController@findWithComments');
     $router->post('/empresa', 'EmpresaController@new');
     $router->put('/empresa/{id}', 'EmpresaController@put');
     $router->patch('/empresa/{id}', 'EmpresaController@patch');
