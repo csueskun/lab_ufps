@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Empresa;
 use App\Feedback;
+use App\Comentario;
 
 class EmpresaController extends Controller
 {
@@ -54,6 +55,29 @@ class EmpresaController extends Controller
             }
             $feedback->visitas = $feedback->visitas + 1;
             $feedback->save();
+
+            return response()->json(['data' => $model]);
+        }
+        else{
+            return response()->json([], 422);
+        }
+    }
+    
+    public function findWithComments($id){
+        $model = Empresa::where('id', $id)->with('productos.tipoproducto')->with('feedback')->first();
+        if($model){
+
+            $feedback = Feedback::where('empresa_id', $id)->first();
+            if(!$feedback){
+                $feedback = new Feedback;
+                $feedback->empresa_id = $id;
+                $feedback->visitas = 0;
+            }
+            $feedback->visitas = $feedback->visitas + 1;
+            $feedback->save();
+
+            $comentarios = Comentario::where('empresa_id', $id)->orderBy('id', 'desc')->take(5)->get();
+            $model->comentarios = $comentarios;
 
             return response()->json(['data' => $model]);
         }
