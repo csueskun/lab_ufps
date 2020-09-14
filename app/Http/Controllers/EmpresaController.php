@@ -76,7 +76,12 @@ class EmpresaController extends Controller
             $feedback->visitas = $feedback->visitas + 1;
             $feedback->save();
 
-            $comentarios = Comentario::where('empresa_id', $id)->orderBy('id', 'desc')->take(5)->get();
+            $comentarios = Comentario::select('comentario.*', 'users.nombres as from')
+                ->join('users', 'users.phone_id', '=', 'comentario.phone_id')
+                ->where('empresa_id', $id)
+                ->orderBy('id', 'desc')
+                ->take(5)
+                ->get();
             $model->comentarios = $comentarios;
 
             return response()->json(['data' => $model]);
