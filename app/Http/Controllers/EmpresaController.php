@@ -77,7 +77,7 @@ class EmpresaController extends Controller
             $feedback->save();
 
             $comentarios = Comentario::select('comentario.*', 'users.nombres as from')
-                ->join('users', 'users.phone_id', '=', 'comentario.phone_id')
+                ->join('users', 'users.phone_id', '=', 'comentario.phone_id', 'left outer')
                 ->where('empresa_id', $id)
                 ->orderBy('id', 'desc')
                 ->take(5)
