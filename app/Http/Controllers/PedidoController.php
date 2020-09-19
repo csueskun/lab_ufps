@@ -21,14 +21,14 @@ class PedidoController extends Controller
         } catch (\Throwable $th) {
             
         }
-        $pedido->save();
+        $id = $pedido->save();
 
         if(!$pedido){
             return response()->json([], 422);
         }
         foreach($items as $item){
             $detalle = new PedidoDetalle;
-            $detalle->pedido_id = $pedido->id;
+            $detalle->pedido_id = $id;
             $detalle->producto = $item->id;
             $detalle->cantidad = $item->cantidad;
             $detalle->totalparcial = $item->precio;
