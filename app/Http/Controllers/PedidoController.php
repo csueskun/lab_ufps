@@ -13,10 +13,10 @@ class PedidoController extends Controller
         $pedido->empresa_id = $request->input('empresa_id');
         $pedido->total = 0;
 
-        $items = json_decode($request->input('items'));
+        $items = $request->input('items');
         try {
             foreach($items as $item){
-                $pedido->total += $item->cantidad * $item->precio;
+                $pedido->total += $item['cantidad'] * $item['precio'];
             }
         } catch (\Throwable $th) {
             
@@ -29,9 +29,9 @@ class PedidoController extends Controller
         foreach($items as $item){
             $detalle = new PedidoDetalle;
             $detalle->pedido_id = $pedido->id;
-            $detalle->producto = $item->id;
-            $detalle->cantidad = $item->cantidad;
-            $detalle->totalparcial = $item->precio;
+            $detalle->producto = $item['id'];
+            $detalle->cantidad = $item['cantidad'];
+            $detalle->totalparcial = $item['precio'];
             $detalle->save();
         }
 
