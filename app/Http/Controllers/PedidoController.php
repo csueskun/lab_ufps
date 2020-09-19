@@ -11,6 +11,7 @@ class PedidoController extends Controller
         $pedido = new Pedido;
         $pedido->phone_id = $request->input('phone_id');
         $pedido->empresa_id = $request->input('empresa_id');
+        $pedido->estado = $request->input('estado');
         $pedido->total = 0;
 
         $items = $request->input('items');
