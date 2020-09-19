@@ -29,7 +29,7 @@ class PedidoController extends Controller
         foreach($items as $item){
             $detalle = new PedidoDetalle;
             $detalle->pedido_id = $pedido->id;
-            $detalle->producto = $item['id'];
+            $detalle->producto_id = $item['id'];
             $detalle->cantidad = $item['cantidad'];
             $detalle->totalparcial = $item['precio'];
             $detalle->save();
