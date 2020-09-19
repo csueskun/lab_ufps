@@ -31,7 +31,8 @@ class PedidoController extends Controller
             $detalle->pedido_id = $pedido->id;
             $detalle->producto_id = $item['id'];
             $detalle->cantidad = $item['cantidad'];
-            $detalle->totalparcial = $item['precio'];
+            $detalle->valorunitario = $item['precio'];
+            $detalle->totalparcial = floatval($detalle->cantidad) * floatval($detalle->valorunitario);
             $detalle->save();
         }
 
