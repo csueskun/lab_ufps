@@ -190,5 +190,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('/comentario', 'ComentarioController@new');
     $router->patch('/comentario/{id}', 'ComentarioController@patch');
     $router->delete('/registro/{id}', 'ComentarioController@delete');
+
+	// PEDIDO
+    $router->post('/full/pedido', 'PedidoController@full');
 	
 });
