@@ -193,5 +193,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
 	// PEDIDO
     $router->post('/full/pedido', 'PedidoController@full');
-	
+	$router->get('/pedido', 'PedidoController@get');
+	$router->get('/toconfirm/pedido/{phone}', 'PedidoController@toConfirm');
+	$router->post('/confirm/pedido', 'PedidoController@confirm');
 });

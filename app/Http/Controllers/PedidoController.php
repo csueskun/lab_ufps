@@ -40,4 +40,38 @@ class PedidoController extends Controller
         return response()->json([], 200);
 
     }
+
+    public function get(Request $request){
+        $params = $request->request->all();
+        $whereRaw = array_key_exists('where_raw', $params) ? $params['where_raw'] : false;
+        unset($params['api_token']);
+        unset($params['where_raw']);
+        $query = Pedido::with('empresa');
+        if(!$whereRaw){
+            $query = $query->where($params);
+        }
+        else{
+            $whereRaw = str_replace('s3lect', 'select', $whereRaw);
+            $query = $query->whereRaw($whereRaw);
+        }
+        $res = $query->get();
+        return response()->json(['data' => $res]);
+    }
+
+    public function toConfirm($phone_id){
+        $res = Pedido::select('id', 'empresa_id', 'created_at')
+        ->with(['empresa'=>function($query){$query->select('empresa.id', 'empresa.nombre');}])
+        ->where('phone_id', $phone_id)
+        ->where('estado', 0)
+        ->get();
+        return response()->json(['data' => $res]);
+    }
+
+    public function confirm(Request $request){
+        $id = $request->input('id');
+        $estado = $request->input('estado');
+        $res = Pedido::where('id', $id)->update(['estado' => $estado]);
+        return response()->json([], $res ? 200: 422);
+    }
+
 }
