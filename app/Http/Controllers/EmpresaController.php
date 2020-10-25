@@ -265,14 +265,14 @@ class EmpresaController extends Controller
         $property = $request->file('property');
         $file = $request->file('file');
         $property = $request->get('property');
-        $location = '../../'.$request->get('location');
+        $location = base_path().'/../'.$request->get('location');
         $extension = $file->getClientOriginalExtension();
         $save_as = $property.'_'.$id.'.'.$extension;
         $file->move($location, $save_as);
         if($file){
             $empresa->$property = $save_as;
             $empresa->save();
-            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property, 'base'=>base_path()], 200);
+            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
         }
         else{
             return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
