@@ -26,6 +26,7 @@ $router->get('/paginated/empresa', 'EmpresaController@paginate');
 $router->get('/product-tree', 'ProductoController@tree');
 $router->get('/related-products/{id}', 'ProductoController@related');
 $router->post('/usuario', 'UsuarioController@new');
+$router->post('/upload/empresa', 'EmpresaController@upload');
 
 
 // GRUPO DE RUTAS QUE NECESITAN AUTENTICACION
@@ -195,5 +196,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('/full/pedido', 'PedidoController@full');
 	$router->get('/pedido', 'PedidoController@get');
 	$router->get('/toconfirm/pedido/{phone}', 'PedidoController@toConfirm');
-	$router->post('/confirm/pedido', 'PedidoController@confirm');
+    $router->post('/confirm/pedido', 'PedidoController@confirm');
 });
