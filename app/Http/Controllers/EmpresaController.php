@@ -272,7 +272,7 @@ class EmpresaController extends Controller
         if($file){
             $empresa->$property = $save_as;
             $empresa->save();
-            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
+            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property, 'base'=>public_path()], 200);
         }
         else{
             return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
