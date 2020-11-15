@@ -22,6 +22,7 @@ $router->post('/login', 'LoginController@login');
 
 
 $router->get('/paginated/producto', 'ProductoController@paginate');
+$router->get('/paginated/near_empresa', 'EmpresaController@paginateNear');
 $router->get('/paginated/empresa', 'EmpresaController@paginate');
 $router->get('/product-tree', 'ProductoController@tree');
 $router->get('/related-products/{id}', 'ProductoController@related');

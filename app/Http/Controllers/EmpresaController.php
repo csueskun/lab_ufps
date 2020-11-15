@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Empresa;
 use App\Feedback;
 use App\Comentario;
+use stdClass;
 
 class EmpresaController extends Controller
 {
@@ -150,6 +151,7 @@ class EmpresaController extends Controller
         $per_page = 30;
         $current_page = 1;
         $params = $request->request->all();
+
         if(array_key_exists('per_page', $params)){
             $per_page = intval($params['per_page']);
         }
@@ -171,12 +173,6 @@ class EmpresaController extends Controller
         if(array_key_exists('grupo_in', $params)){
             $pagination->pagination->grupo = intval($params['grupo_in']);
         }
-        // if(array_key_exists('search', $params)){
-        //     if($params['search'] != ''){
-        //         $where[] = ['producto.descripcion', 'like', '%'.$params['search'].'%']; 
-        //         $pagination->pagination->search = $params['search'];
-        //     }
-        // }
         if(array_key_exists('nombre', $params)){
             $where[] = ['empresa.nombre', 'like', '%'.$params['nombre'].'%']; 
             $pagination->pagination->nombre = $params['nombre'];
@@ -256,6 +252,158 @@ class EmpresaController extends Controller
         return response()->json(['data' => $pagination]);
     }
 
+    public function paginateNear(Request $request){
+        $per_page = 32;
+        $current_page = 1;
+        $params = $request->request->all();
+
+        $latitude = 0;
+        $longitude = 0;
+        $near_me = false;
+        if(array_key_exists('latitude', $params)){
+            $latitude = floatval($params['latitude']);
+        }
+        if(array_key_exists('longitude', $params)){
+            $longitude = floatval($params['longitude']);
+        }
+        if(array_key_exists('near_me', $params)){
+            $near_me = boolval($params['near_me']);
+        }
+
+        $where = [];
+        $pagination = new \stdClass;
+        $pagination->pagination = new \stdClass;
+
+        if(array_key_exists('clase', $params)){
+            $where['clase.id'] = $params['clase']; 
+            $pagination->pagination->clase = intval($params['clase']);
+        }
+        if(array_key_exists('grupo', $params)){
+            $where['grupo.id'] = $params['grupo']; 
+            $pagination->pagination->grupo = intval($params['grupo']);
+        }
+        if(array_key_exists('grupo_in', $params)){
+            $pagination->pagination->grupo = intval($params['grupo_in']);
+        }
+        if(array_key_exists('nombre', $params)){
+            $where[] = ['empresa.nombre', 'like', '%'.$params['nombre'].'%']; 
+            $pagination->pagination->nombre = $params['nombre'];
+        }
+        $total = new Empresa;
+        $total = $total->select('empresa.id')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
+        ->where($where);
+        if(array_key_exists('grupo_in', $params)){
+            $total = $total->whereIn('grupo.id', $params['grupo_in']);
+        }
+        if(array_key_exists('search', $params)){
+            if($params['search'] != ''){
+                $param = $params['search'];
+                $total = $total->where(function($w) use($param){
+                    $w->where('empresa.nombre', 'like', '%'.$param.'%')
+                    ->orWhere('producto.etiquetas', 'like', '%'.$param.'%')
+                    ->orWhere('producto.descripcion', 'like', '%'.$param.'%');
+                });
+            }
+        }
+        $total = $total
+        ->distinct()
+        ->get();
+        
+        $total = count($total);
+        $pagination->pagination->last_page =  1;
+        $skip = 0;
+
+        // ----------------------
+        $data = new Empresa;
+        $data = $data
+        ->select('empresa.id', 'empresa.coordenadax', 'empresa.coordenaday')
+        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
+        ->where($where);
+        if(array_key_exists('grupo_in', $params)){
+            $data = $data->whereIn('grupo.id', $params['grupo_in']);
+        }
+        if(array_key_exists('search', $params)){
+            if($params['search'] != ''){
+                $param = $params['search'];
+                $data = $data->where(function($w) use($param){
+                    $w->where('empresa.nombre', 'like', '%'.$param.'%')
+                    ->orWhere('producto.etiquetas', 'like', '%'.$param.'%')
+                    ->orWhere('producto.descripcion', 'like', '%'.$param.'%');
+                });
+            }
+        }
+        $data = $data
+        ->distinct()
+        ->get();
+
+        $empresas_ids = [];
+        $coordinates_dict = array();
+
+        foreach ($data as $empresa_coord) {
+            if($empresa_coord->coordenadax != null && $empresa_coord->coordenadax != null){
+                if(is_float($empresa_coord->coordenadax)&&is_float($empresa_coord->coordenaday)){
+                    $empresas_ids[] = $empresa_coord->id;
+                    $coordinates_dict['id'.$empresa_coord->id] = $this->distance(
+                        $latitude, $longitude, $empresa_coord->coordenadax, $empresa_coord->coordenaday
+                    );
+                    if(count($empresas_ids)>31){
+                        break;
+                    }
+                }
+            }
+        }
+
+        $data = new Empresa;
+        $data = $data
+        ->select('empresa.*')
+        ->whereIn('id', $empresas_ids)
+        ->get();
+
+        $aux_data = [];
+
+        foreach ($data as $empresa_coord){
+            
+            $empresa_coord->distance = $coordinates_dict['id'.$empresa_coord->id];
+            $aux_data[] = $empresa_coord;
+        }
+
+        $data = $aux_data;
+        for ($i=0; $i < count($data); $i++) {
+            $original = $data[$i];
+            $min = $data[$i]->distance;
+            $swap = $i;
+
+            for ($j=$i; $j < count($data); $j++) { 
+                if($min > $data[$j]->distance){
+                    $min = $data[$j]->distance;
+                    $swap = $j;
+                }
+            }
+            $data[$i] = $data[$swap];
+            $data[$swap] = $original;
+        }
+        
+        
+        $pagination->pagination->current_page =  1;
+        $pagination->pagination->per_page =  32;
+        $pagination->pagination->total =  count($empresas_ids);
+        $from = 1;
+        $pagination->pagination->from =  $from;
+        $to = count($empresas_ids);
+        $pagination->pagination->to =  $to;
+        $pagination->pagination->showing =  $to - $from + 1;
+        $pagination->data =  $data;
+        
+        return response()->json(['data' => $pagination]);
+    }
+
     public function upload(Request $request){
         $id = $request->get('id');
         $empresa = Empresa::find($id);
@@ -278,4 +426,20 @@ class EmpresaController extends Controller
             return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
         }
     }
+
+    public function distance($lat1, $lon1, $lat2, $lon2) { 
+        $pi80 = M_PI / 180; 
+        $lat1 *= $pi80; 
+        $lon1 *= $pi80; 
+        $lat2 *= $pi80; 
+        $lon2 *= $pi80; 
+        $r = 6372.797;
+        $dlat = $lat2 - $lat1; 
+        $dlon = $lon2 - $lon1; 
+        $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlon / 2) * sin($dlon / 2); 
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a)); 
+        $km = $r * $c; 
+        return $km; 
+    }
+
 }
