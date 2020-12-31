@@ -182,7 +182,7 @@ class EmpresaController extends Controller
         ->leftJoin('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
-        ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
+        ->leftJoin('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
         if(array_key_exists('grupo_in', $params)){
             $total = $total->whereIn('grupo.id', $params['grupo_in']);
@@ -218,7 +218,7 @@ class EmpresaController extends Controller
         ->leftJoin('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
         ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
-        ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
+        ->leftJoin('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
         if(array_key_exists('grupo_in', $params)){
             $data = $data->whereIn('grupo.id', $params['grupo_in']);
