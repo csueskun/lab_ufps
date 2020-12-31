@@ -180,8 +180,8 @@ class EmpresaController extends Controller
         $total = new Empresa;
         $total = $total->select('empresa.id')
         ->leftJoin('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
-        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
-        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->leftJoin('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->leftJoin('clase', 'clase.id', '=', 'grupo.clase_id')
         ->leftJoin('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
         if(array_key_exists('grupo_in', $params)){
@@ -216,8 +216,8 @@ class EmpresaController extends Controller
         $data = $data
         ->select('empresa.*')
         ->leftJoin('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
-        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
-        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->leftJoin('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->leftJoin('clase', 'clase.id', '=', 'grupo.clase_id')
         ->leftJoin('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
         if(array_key_exists('grupo_in', $params)){
