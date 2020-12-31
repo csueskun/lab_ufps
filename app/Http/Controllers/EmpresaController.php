@@ -180,7 +180,7 @@ class EmpresaController extends Controller
         $total = new Empresa;
         $total = $total->select('empresa.id')
         ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
-        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->leftJoin('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
         ->join('clase', 'clase.id', '=', 'grupo.clase_id')
         ->join('producto', 'producto.empresa_id', '=', 'empresa.id')
         ->where($where);
