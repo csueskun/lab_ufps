@@ -43,6 +43,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/empresa/{id}', 'EmpresaController@put');
     $router->patch('/empresa/{id}', 'EmpresaController@patch');
     $router->delete('/empresa/{id}', 'EmpresaController@delete');
+    $router->get('/prepare/empresa', 'EmpresaController@prepareNew');
 
     // TIPOPRODUCTO
     $router->get('/tipoproducto', 'TipoProductoController@get');

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Empresa;
 use App\Feedback;
 use App\Comentario;
+use App\Clase;
 use stdClass;
 
 class EmpresaController extends Controller
@@ -440,6 +441,11 @@ class EmpresaController extends Controller
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a)); 
         $km = $r * $c; 
         return $km; 
+    }
+
+    public function prepareNew() { 
+        $clases = Clase::with('grupos')->get();
+        return response()->json(['clases' => $clases], 200);
     }
 
 }
