@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Empresa;
+use App\GrupoEmpresa;
 use App\Feedback;
 use App\Comentario;
 use App\Clase;
@@ -135,12 +136,26 @@ class EmpresaController extends Controller
     }
 
     public function save($request, $model, $rules, $fields){
+        $params = $request->request->all();
+        $grupos = [];
+        if(array_key_exists('grupos', $params)){
+            $grupos = $params['grupos'];
+        }
+
         $this->validate($request, $rules);
         foreach($fields as $field){
             $model->$field = $request->input($field);
         }
         $res = $model->save();
         if($res){
+            foreach($grupos as $grupo){
+                $ge = new GrupoEmpresa;
+                $ge->grupo_id = $grupo;
+                $ge->empresa_id = $grupo;
+                $ge->prioridad = 0;
+                $ge->estado = 1;
+                $ge->save();
+            }
             return response()->json(['data' => $model]);
         }
         else{
