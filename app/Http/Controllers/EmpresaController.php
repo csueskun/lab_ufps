@@ -151,7 +151,7 @@ class EmpresaController extends Controller
             foreach($grupos as $grupo){
                 $ge = new GrupoEmpresa;
                 $ge->grupo_id = $grupo;
-                $ge->empresa_id = $grupo;
+                $ge->empresa_id = $model->id;
                 $ge->prioridad = 0;
                 $ge->estado = 1;
                 $ge->save();
