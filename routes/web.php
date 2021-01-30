@@ -158,6 +158,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/producto', 'ProductoController@get');
     $router->get('/producto/{id}', 'ProductoController@find');
     $router->post('/producto', 'ProductoController@new');
+    $router->post('/producto-app', 'ProductoController@newFromApp');
     $router->put('/producto/{id}', 'ProductoController@put');
     $router->patch('/producto/{id}', 'ProductoController@patch');
     $router->delete('/producto/{id}', 'ProductoController@delete');
