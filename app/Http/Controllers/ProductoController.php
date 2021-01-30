@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Producto;
+use App\Empresa;
 
 class ProductoController extends Controller
 {
@@ -132,6 +133,29 @@ class ProductoController extends Controller
     
     public function new(Request $request){
         return $this->save($request, new Producto, $this->rules, $this->fields);
+    }
+    
+    public function newFromApp(Request $request){
+        $tel = $request->input('tel');
+        $empresa = Empresa::where('telefono', $tel)->first();
+        if(!$empresa){
+            return response()->json(['data' => ['tel'=>'No se encontró una empresa con ese teléfono de contacto.']], 422);
+        }
+        $rules = $this->rules;
+        $rules['empresa_id'] = '';
+        $this->validate($request, $rules);
+        $model = new Producto;
+        $model->empresa_id = $empresa->id;
+        foreach($this->fields as $field){
+            $model->$field = $request->input($field);
+        }
+        $res = $model->save();
+        if($res){
+            return response()->json(['data' => $model]);
+        }
+        else{
+            return response()->json(['data' => $res], 422);
+        }
     }
     
     public function put(Request $request, $id){
