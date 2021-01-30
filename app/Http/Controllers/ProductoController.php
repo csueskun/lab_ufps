@@ -139,7 +139,7 @@ class ProductoController extends Controller
         $tel = $request->input('tel');
         $empresa = Empresa::where('telefono', $tel)->first();
         if(!$empresa){
-            return response()->json(['data' => ['tel'=>'No se encontró una empresa con ese teléfono de contacto.']], 422);
+            return response()->json(['tel' => ['No se encontró una empresa con ese teléfono de contacto.']], 422);
         }
         $rules = $this->rules;
         $rules['empresa_id'] = '';
