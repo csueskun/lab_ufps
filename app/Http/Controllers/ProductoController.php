@@ -141,9 +141,10 @@ class ProductoController extends Controller
         if(!$empresa){
             return response()->json(['tel' => ['No se encontró una empresa con ese teléfono de contacto.']], 422);
         }
-        $rules = $this->rules;
-        $rules['empresa_id'] = '';
-        $this->validate($request, $rules);
+        $request->merge([
+            'empresa_id' => $empresa->id,
+        ]);
+        $this->validate($request, $this->rules);
         $model = new Producto;
         $model->empresa_id = $empresa->id;
         foreach($this->fields as $field){
