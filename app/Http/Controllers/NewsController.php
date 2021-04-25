@@ -167,4 +167,27 @@ class NewsController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
+
+    public function upload(Request $request){
+        $id = $request->get('id');
+        $noticia = Producto::find($id);
+        if(!$noticia){
+            return response()->json(['msg' => 'No se encontró la noticia'], 540);
+        }
+        $property = $request->file('property');
+        $file = $request->file('file');
+        $property = $request->get('property');
+        $location = base_path().'/../'.$request->get('location');
+        $extension = $file->getClientOriginalExtension();
+        $save_as = $property.'_'.$id.'.'.$extension;
+        $file->move($location, $save_as);
+        if($file){
+            $noticia->$property = $save_as;
+            $noticia->save();
+            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
+        }
+        else{
+            return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
+        }
+    }
 }

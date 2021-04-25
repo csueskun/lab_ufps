@@ -286,9 +286,9 @@ class ProductoController extends Controller
 
     public function upload(Request $request){
         $id = $request->get('id');
-        $empresa = Producto::find($id);
-        if(!$empresa){
-            return response()->json(['msg' => 'No se encontró la empresa'], 540);
+        $producto = Producto::find($id);
+        if(!$producto){
+            return response()->json(['msg' => 'No se encontró el producto'], 540);
         }
         $property = $request->file('property');
         $file = $request->file('file');
@@ -298,8 +298,8 @@ class ProductoController extends Controller
         $save_as = $property.'_'.$id.'.'.$extension;
         $file->move($location, $save_as);
         if($file){
-            $empresa->$property = $save_as;
-            $empresa->save();
+            $producto->$property = $save_as;
+            $producto->save();
             return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
         }
         else{

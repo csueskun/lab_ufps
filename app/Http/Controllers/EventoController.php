@@ -166,4 +166,27 @@ public function paginate(Request $request){
             return response()->json(['data' => $res], 422);
         }
     }
+
+    public function upload(Request $request){
+        $id = $request->get('id');
+        $evento = Evento::find($id);
+        if(!$evento){
+            return response()->json(['msg' => 'No se encontró el evento'], 540);
+        }
+        $property = $request->file('property');
+        $file = $request->file('file');
+        $property = $request->get('property');
+        $location = base_path().'/../'.$request->get('location');
+        $extension = $file->getClientOriginalExtension();
+        $save_as = $property.'_'.$id.'.'.$extension;
+        $file->move($location, $save_as);
+        if($file){
+            $evento->$property = $save_as;
+            $evento->save();
+            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
+        }
+        else{
+            return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
+        }
+    }
 }
