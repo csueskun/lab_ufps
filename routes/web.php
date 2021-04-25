@@ -33,6 +33,7 @@ $router->post('/upload/evento', 'EventoController@upload');
 $router->post('/upload/news', 'NewsController@upload');
 $router->post('/upload/oferta', 'OfertaController@upload');
 
+$router->get('/paginated/news', 'NewsController@paginate');
 
 // GRUPO DE RUTAS QUE NECESITAN AUTENTICACION
 $router->group(['middleware' => 'auth'], function () use ($router) {
@@ -138,7 +139,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/news/{id}', 'NewsController@put');
     $router->patch('/news/{id}', 'NewsController@patch');
     $router->delete('/news/{id}', 'NewsController@delete');
-    $router->get('/paginated/news', 'NewsController@paginate');
+    // $router->get('/paginated/news', 'NewsController@paginate');
     
     //EVENTOS
 	$router->get('/evento', 'EventoController@get');

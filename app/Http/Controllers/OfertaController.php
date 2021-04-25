@@ -57,7 +57,7 @@ class OfertaController extends Controller
         }    
         if(array_key_exists('search', $params)){
             if($params['search'] != ''){
-                $where[] = ['empresa.nombre', 'like', '%'.$params['search'].'%']; 
+                $where[] = ['oferta.descripcion', 'like', '%'.$params['search'].'%']; 
                 $pagination->pagination->search = $params['search'];
             }
         }    

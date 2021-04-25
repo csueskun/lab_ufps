@@ -56,7 +56,7 @@ public function paginate(Request $request){
     }    
     if(array_key_exists('search', $params)){
         if($params['search'] != ''){
-            $where[] = ['empresa.nombre', 'like', '%'.$params['search'].'%']; 
+            $where[] = ['evento.descripcion', 'like', '%'.$params['search'].'%']; 
             $pagination->pagination->search = $params['search'];
         }
     }    

@@ -56,10 +56,10 @@ class NewsController extends Controller
         }    
         if(array_key_exists('search', $params)){
             if($params['search'] != ''){
-                $where[] = ['empresa.nombre', 'like', '%'.$params['search'].'%']; 
+                $where[] = ['news.titulo', 'like', '%'.$params['search'].'%']; 
                 $pagination->pagination->search = $params['search'];
             }
-        }    
+        }   
         //count de registros
         $total = News::select('news.id')
         ->join('empresa', 'empresa.id', '=', 'news.empresa_id')
@@ -82,7 +82,6 @@ class NewsController extends Controller
             ->join('empresa', 'empresa.id', '=', 'news.empresa_id')
             ->where($where)
             ->with('empresa')
-            
             ->skip($skip)
             ->take($per_page)
             ->distinct()
