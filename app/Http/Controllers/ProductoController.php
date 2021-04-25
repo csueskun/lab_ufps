@@ -283,4 +283,27 @@ class ProductoController extends Controller
 
         return response()->json(['data' => $tree]);
     }
+
+    public function upload(Request $request){
+        $id = $request->get('id');
+        $empresa = Producto::find($id);
+        if(!$empresa){
+            return response()->json(['msg' => 'No se encontró la empresa'], 540);
+        }
+        $property = $request->file('property');
+        $file = $request->file('file');
+        $property = $request->get('property');
+        $location = base_path().'/../'.$request->get('location');
+        $extension = $file->getClientOriginalExtension();
+        $save_as = $property.'_'.$id.'.'.$extension;
+        $file->move($location, $save_as);
+        if($file){
+            $empresa->$property = $save_as;
+            $empresa->save();
+            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
+        }
+        else{
+            return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
+        }
+    }
 }

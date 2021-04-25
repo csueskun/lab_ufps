@@ -28,6 +28,7 @@ $router->get('/product-tree', 'ProductoController@tree');
 $router->get('/related-products/{id}', 'ProductoController@related');
 $router->post('/usuario', 'UsuarioController@new');
 $router->post('/upload/empresa', 'EmpresaController@upload');
+$router->post('/upload/producto', 'ProductoController@upload');
 
 
 // GRUPO DE RUTAS QUE NECESITAN AUTENTICACION
