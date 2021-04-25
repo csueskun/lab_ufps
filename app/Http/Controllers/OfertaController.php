@@ -165,4 +165,27 @@ class OfertaController extends Controller
             return response()->json(['data' => $res], 422);
         }
     }
+
+    public function upload(Request $request){
+        $id = $request->get('id');
+        $oferta = Oferta::find($id);
+        if(!$oferta){
+            return response()->json(['msg' => 'No se encontró la oferta'], 540);
+        }
+        $property = $request->file('property');
+        $file = $request->file('file');
+        $property = $request->get('property');
+        $location = base_path().'/../'.$request->get('location');
+        $extension = $file->getClientOriginalExtension();
+        $save_as = $property.'_'.$id.'.'.$extension;
+        $file->move($location, $save_as);
+        if($file){
+            $oferta->$property = $save_as;
+            $oferta->save();
+            return response()->json(['saved' => $save_as, 'id'=>$id, 'property'=>$property], 200);
+        }
+        else{
+            return response()->json(['msg' => 'No se pudo subir el archivo'], 540);
+        }
+    }
 }

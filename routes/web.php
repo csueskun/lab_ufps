@@ -31,6 +31,7 @@ $router->post('/upload/empresa', 'EmpresaController@upload');
 $router->post('/upload/producto', 'ProductoController@upload');
 $router->post('/upload/evento', 'EventoController@upload');
 $router->post('/upload/news', 'NewsController@upload');
+$router->post('/upload/oferta', 'OfertaController@upload');
 
 
 // GRUPO DE RUTAS QUE NECESITAN AUTENTICACION
