@@ -170,7 +170,7 @@ class NewsController extends Controller
 
     public function upload(Request $request){
         $id = $request->get('id');
-        $noticia = Producto::find($id);
+        $noticia = News::find($id);
         if(!$noticia){
             return response()->json(['msg' => 'No se encontró la noticia'], 540);
         }
