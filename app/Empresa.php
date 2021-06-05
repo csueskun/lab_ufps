@@ -17,7 +17,7 @@ class Empresa extends Model
     }
 
     public function horarios(){
-        return $this->hasMany('App\Horarios');
+        return $this->hasMany('App\Horario');
     }
 
     public function feedback()
