@@ -67,7 +67,7 @@ class EmpresaController extends Controller
     }
     
     public function findWithComments($id){
-        $model = Empresa::where('id', $id)->with('productos.tipoproducto')->with('feedback')->first();
+        $model = Empresa::where('id', $id)->with('productos.tipoproducto')->with('feedback')->with('horarios')->first();
         if($model){
 
             $feedback = Feedback::where('empresa_id', $id)->first();
