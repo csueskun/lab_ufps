@@ -10,7 +10,7 @@ class BannerController extends Controller
         'img', 'ancho', 'pantalla', 'titulo', 'estado', 'vence'];
 
     protected $rules = [
-        'img' => 'required', 'ancho' => 'required', 'pantalla' => 'required', 'titulo' => 'required'];
+        'ancho' => 'required', 'pantalla' => 'required', 'titulo' => 'required'];
     
     public function all(){
         return response()->json(['data' => Banner::all()]);
