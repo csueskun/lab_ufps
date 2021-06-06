@@ -19,6 +19,7 @@ $router->get('/hola', function () use ($router) {
     return 'hola tu2';
 });
 $router->post('/login', 'LoginController@login');
+$router->get('/banners', 'ConfigController@getBanners');
 
 
 $router->get('/paginated/producto', 'ProductoController@paginate');
