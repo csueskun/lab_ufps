@@ -7,7 +7,7 @@ use App\Banner;
 class BannerController extends Controller
 {
     protected $fields = [
-        'img', 'ancho', 'pantalla', 'titulo'];
+        'img', 'ancho', 'pantalla', 'titulo', 'estado', 'vence'];
 
     protected $rules = [
         'img' => 'required', 'ancho' => 'required', 'pantalla' => 'required', 'titulo' => 'required'];
