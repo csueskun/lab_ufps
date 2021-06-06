@@ -19,10 +19,7 @@ class ConfigController extends Controller
 
     public function getBanners(){
         $file = base_path().'/../json/banners.json';
-        $banners = '';
-        foreach(file($file) as $line) {
-            $banners .= $line;
-        }
+        $banners = json_decode(file_get_contents($file), true);
         return response()->json(['data' => $banners]);
     }
 
