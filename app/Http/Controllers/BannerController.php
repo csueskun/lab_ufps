@@ -19,9 +19,14 @@ class BannerController extends Controller
     public function get(Request $request){
         $params = $request->request->all();
         $whereRaw = array_key_exists('where_raw', $params) ? $params['where_raw'] : false;
+        $vigente = array_key_exists('vigente', $params);
         unset($params['api_token']);
         unset($params['where_raw']);
+        unset($params['vigente']);
         if(!$whereRaw){
+            if($vigente){
+                $params[] = ['vence', '>=', date('Y-m-d H:i:s')];
+            }
             $res = Banner::where($params)->get();
         }
         else{
