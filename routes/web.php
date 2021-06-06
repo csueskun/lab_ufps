@@ -20,6 +20,8 @@ $router->get('/hola', function () use ($router) {
 });
 $router->post('/login', 'LoginController@login');
 $router->get('/banners', 'ConfigController@getBanners');
+$router->post('/banners', 'ConfigController@saveBanners');
+$router->post('/upload/banners', 'ConfigController@upload');
 
 
 $router->get('/paginated/producto', 'ProductoController@paginate');
