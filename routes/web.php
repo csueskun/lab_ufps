@@ -19,9 +19,6 @@ $router->get('/hola', function () use ($router) {
     return 'hola tu2';
 });
 $router->post('/login', 'LoginController@login');
-$router->get('/banners', 'ConfigController@getBanners');
-$router->post('/banners', 'ConfigController@saveBanners');
-$router->post('/upload/banners', 'ConfigController@upload');
 
 
 $router->get('/paginated/producto', 'ProductoController@paginate');
@@ -35,6 +32,7 @@ $router->post('/upload/producto', 'ProductoController@upload');
 $router->post('/upload/evento', 'EventoController@upload');
 $router->post('/upload/news', 'NewsController@upload');
 $router->post('/upload/oferta', 'OfertaController@upload');
+$router->post('/upload/banner', 'BannerController@upload');
 
 $router->get('/paginated/news', 'NewsController@paginate');
 
@@ -152,6 +150,15 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->patch('/evento/{id}', 'EventoController@patch');
     $router->delete('/evento/{id}', 'EventoController@delete');
     $router->get('/paginated/evento', 'EventoController@paginate');
+
+    //BANNERS
+	$router->get('/banner', 'BannerController@get');
+    $router->get('/banner/{id}', 'BannerController@find');
+    $router->post('/banner', 'BannerController@new');
+    $router->put('/banner/{id}', 'BannerController@put');
+    $router->patch('/banner/{id}', 'BannerController@patch');
+    $router->delete('/banner/{id}', 'BannerController@delete');
+    $router->get('/paginated/banner', 'BannerController@paginate');
     
     //ATENCION
 	$router->get('/atencion', 'AtencionController@get');
