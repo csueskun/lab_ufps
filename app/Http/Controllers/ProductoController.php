@@ -76,17 +76,17 @@ class ProductoController extends Controller
         }
 
         $total = Producto::select('producto.id')
-        ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
-        ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
-        ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
-        ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+        ->leftJoin('empresa', 'empresa.id', '=', 'producto.empresa_id')
+        ->leftJoin('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+        ->leftJoin('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+        ->leftJoin('clase', 'clase.id', '=', 'grupo.clase_id')
         ->where($where)
         ->distinct()
         ->get();
         
         $total = count($total);
         $pagination->pagination->last_page =  ceil($total/$per_page);
-
+        
         if($current_page>$pagination->pagination->last_page){
             $current_page = $pagination->pagination->last_page;
         }
@@ -96,10 +96,10 @@ class ProductoController extends Controller
         $skip = $per_page * ($current_page-1);
 
         $data = Producto::select('producto.*')
-            ->join('empresa', 'empresa.id', '=', 'producto.empresa_id')
-            ->join('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
-            ->join('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
-            ->join('clase', 'clase.id', '=', 'grupo.clase_id')
+            ->leftJoin('empresa', 'empresa.id', '=', 'producto.empresa_id')
+            ->leftJoin('grupoempresa', 'grupoempresa.empresa_id', '=', 'empresa.id')
+            ->leftJoin('grupo', 'grupo.id', '=', 'grupoempresa.grupo_id')
+            ->leftJoin('clase', 'clase.id', '=', 'grupo.clase_id')
             ->where($where)
             ->with('empresa')
             ->with('tipoproducto')
@@ -160,7 +160,6 @@ class ProductoController extends Controller
     public function put(Request $request, $id){
         $rules = $this->rules;
         $rules['codigo'] .= ',codigo,'.$id;
-        $rules['descripcion'] .= ',descripcion,'.$id;
         $fields = $this->fields;
         return $this->save($request, Producto::find($id), $rules, $fields);
     }
@@ -168,7 +167,6 @@ class ProductoController extends Controller
     public function patch(Request $request, $id){
         $rules = $this->rules;
         $rules['codigo'] .= ',codigo,'.$id;
-        $rules['descripcion'] .= ',descripcion,'.$id;
         $fields = $this->fields;
         foreach ($rules as $key => $value) {
             if(!$request->has($key)){
@@ -216,6 +214,7 @@ class ProductoController extends Controller
     }
 
     public function save($request, $model, $rules, $fields){
+
         $this->validate($request, $rules);
         foreach($fields as $field){
             $model->$field = $request->input($field);
