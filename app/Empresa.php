@@ -20,6 +20,10 @@ class Empresa extends Model
         return $this->hasMany('App\Horario');
     }
 
+    public function grupos(){
+        return $this->hasMany('App\GrupoEmpresa');
+    }
+
     public function feedback()
     {
         return $this->hasOne('App\Feedback');

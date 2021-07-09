@@ -250,6 +250,7 @@ class EmpresaController extends Controller
             }
         }
         $data = $data
+        ->with('grupos.grupo.clase')
         ->skip($skip)
         ->take($per_page)
         ->distinct()
