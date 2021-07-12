@@ -75,6 +75,14 @@ class EmpresaController extends Controller
                 $feedback = new Feedback;
                 $feedback->empresa_id = $id;
                 $feedback->visitas = 0;
+                $feedback->puntaje = 0;
+            }
+            else{
+                try {
+                    $feedback->puntaje = ($feedback->infraestructura+$feedback->personal+$feedback->precios+$feedback->servicio)/4;
+                } catch (\Throwable $th) {
+                    $feedback->puntaje = 0;
+                }
             }
             $feedback->visitas = $feedback->visitas + 1;
             $feedback->save();
@@ -261,7 +269,7 @@ class EmpresaController extends Controller
             try {
                 $e->feedback->puntaje = ($e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/4;
             } catch (\Throwable $th) {
-                $e->feedback->puntaje = -1;
+                $e->feedback->puntaje = 0;
             }
         }
         
@@ -390,9 +398,18 @@ class EmpresaController extends Controller
         $data = $data
         ->select('empresa.*')
         ->whereIn('id', $empresas_ids)
+        ->with('feedback')
         ->get();
 
         $aux_data = [];
+
+        foreach ($data as $e) {
+            try {
+                $e->feedback->puntaje = ($e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/4;
+            } catch (\Throwable $th) {
+                $e->feedback->puntaje = 0;
+            }
+        }
 
         foreach ($data as $empresa_coord){
             
