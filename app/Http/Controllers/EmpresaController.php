@@ -79,7 +79,7 @@ class EmpresaController extends Controller
             }
             else{
                 try {
-                    $feedback->puntaje = ($feedback->infraestructura+$feedback->personal+$feedback->precios+$feedback->servicio)/4;
+                    $feedback->puntaje = ($feedback->comida+$feedback->infraestructura+$feedback->personal+$feedback->precios+$feedback->servicio)/5;
                 } catch (\Throwable $th) {
                     $feedback->puntaje = 0;
                 }
@@ -267,7 +267,7 @@ class EmpresaController extends Controller
 
         foreach ($data as $e) {
             try {
-                $e->feedback->puntaje = ($e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/4;
+                $e->feedback->puntaje = ($e->feedback->comida+$e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/5;
             } catch (\Throwable $th) {
                 $e->feedback->puntaje = 0;
             }
@@ -405,7 +405,7 @@ class EmpresaController extends Controller
 
         foreach ($data as $e) {
             try {
-                $e->feedback->puntaje = ($e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/4;
+                $e->feedback->puntaje = ($e->feedback->comida+$e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/5;
             } catch (\Throwable $th) {
                 $e->feedback->puntaje = 0;
             }
