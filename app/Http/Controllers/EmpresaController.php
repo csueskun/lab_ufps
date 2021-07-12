@@ -261,7 +261,7 @@ class EmpresaController extends Controller
             try {
                 $e->feedback->puntaje = ($e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/4;
             } catch (\Throwable $th) {
-                $e->feedback->puntaje = 0;
+                $e->feedback->puntaje = -1;
             }
         }
         
