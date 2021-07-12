@@ -256,6 +256,14 @@ class EmpresaController extends Controller
         ->take($per_page)
         ->distinct()
         ->get();
+
+        foreach ($data as $e) {
+            try {
+                $e->feedback->puntaje = ($e->feedback->infraestructura+$e->feedback->personal+$e->feedback->precios+$e->feedback->servicio)/4;
+            } catch (\Throwable $th) {
+                $e->feedback->puntaje = 0;
+            }
+        }
         
         $pagination->pagination->current_page =  $current_page;
         $pagination->pagination->per_page =  $per_page;
