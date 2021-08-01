@@ -22,16 +22,17 @@ class LoginController extends Controller
     public function login(Request $request){
         
         $this->validate($request, [
-            'usuario' => 'required',
+            'documento' => 'required',
             'password' => 'required'
         ]);
-        $user = User::where('usuario', $request->input('usuario'))->first();
+        $user = User::where('documento', $request->input('documento'))->first();
         if(!$user){
             return response()->json(['msg'=>'Usuario no encontrado'], 401);
         }
-        if(Hash::check($request->input('password'), $user->password)){
+        // if(Hash::check($request->input('password'), $user->password)){
+        if($request->input('password')==$user->password){
             $apiToken = base64_encode($this->generateRandomString(40));
-            User::where('usuario', $request->input('usuario'))->update(['api_token' => "$apiToken"]);
+            User::where('documento', $request->input('documento'))->update(['api_token' => "$apiToken"]);
             $user->api_token = $apiToken;
             return response()->json(['user'=>$user]);
         }else{
